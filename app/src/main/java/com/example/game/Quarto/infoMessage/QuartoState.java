@@ -12,7 +12,7 @@ public class QuartoState extends GameState {
         public final int num;
         PlayerTurn(int num) {this.num = num;}
     }
-    public enum TypeTurn {CHOOSE, PLACE}
+    public enum TypeTurn {PICK, PLACE}
 
     private Piece[] pool;
     private Piece[][] board;
@@ -26,7 +26,7 @@ public class QuartoState extends GameState {
     public QuartoState()
     {
         this.decidePlayerStart(); // decide first player by random
-        this.typeTurn = TypeTurn.CHOOSE; // first player must choose a piece
+        this.typeTurn = TypeTurn.PICK; // first player must choose a piece
 
         /* instantiating pieces */
         this.pool = new Piece[16];
@@ -132,7 +132,7 @@ public class QuartoState extends GameState {
 
             /* current player's turn to select piece for opponent */
             // do not have to change player turn
-            typeTurn = TypeTurn.CHOOSE; // set to choosing turn
+            typeTurn = TypeTurn.PICK; // set to choosing turn
 
             return true;
         }
