@@ -1,6 +1,8 @@
-package com.example.game.Quarto;
+package com.example.game.Quarto.infoMessage;
 
 import com.example.game.GameFramework.infoMessage.GameState;
+import com.example.game.Quarto.misc.Piece;
+
 import java.util.Random;
 
 public class QuartoState extends GameState {
