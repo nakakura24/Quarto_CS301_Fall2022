@@ -1,4 +1,4 @@
-package com.example.game.Quarto;
+package com.example.game.Quarto.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
