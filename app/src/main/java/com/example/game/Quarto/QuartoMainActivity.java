@@ -17,8 +17,21 @@ public class QuartoMainActivity extends GameMainActivity {
         return null;
     }
 
+    /**
+     * createLocalGame
+     *
+     * Creates a new game that runs on the server tablet,
+     * @param gameState
+     *              The desired gameState to start at or null for new game
+     *
+     * @return a new, game-specific instance of a sub-class of the LocalGame class.
+     */
     @Override
     public LocalGame createLocalGame(GameState gameState) {
-        return null;
+        if(gameState == null)
+            return new QuartoLocalGame();
+        return new QuartoLocalGame((QuartoState) gameState);
     }
+
+
 }
