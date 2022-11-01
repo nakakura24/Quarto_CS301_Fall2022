@@ -7,7 +7,7 @@
     android:gravity="center"
     tools:context=".Quarto.QuartoMainActivity">
 
-    <com.example.game.Quarto.QuartoView
+    <com.example.game.Quarto.views.QuartoView
         android:id="@+id/quartoView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
