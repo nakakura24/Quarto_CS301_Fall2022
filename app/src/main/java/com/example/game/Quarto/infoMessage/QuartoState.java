@@ -6,16 +6,11 @@ import java.util.Random;
 
 public class QuartoState extends GameState {
 
-    public enum PlayerTurn {
-        ONE(1), TWO(2);
-        public final int num;
-        PlayerTurn(int num) {this.num = num;}
-    }
     public enum TypeTurn {PICK, PLACE}
 
     private Piece[] pool;
     private Piece[][] board;
-    private PlayerTurn playerTurn;
+    private int playerTurn;
     private TypeTurn typeTurn;
     private Piece toPlace;
 
@@ -66,12 +61,11 @@ public class QuartoState extends GameState {
      */
     private void decidePlayerStart()
     {
-        // create new random object, then store it as ints for each player
+        /* create new random object */
         Random rng = new Random();
-        int decideValue = rng.nextInt(2); // coin flip
 
-        /* P2 goes first if 1; P1 goes first if 0 */
-        playerTurn = (decideValue == 1) ? PlayerTurn.TWO : PlayerTurn.ONE;
+        /* Randomly set first move to playerId 0 or 1 */
+        playerTurn = rng.nextInt(2);
     }
 
     /**
@@ -79,11 +73,11 @@ public class QuartoState extends GameState {
      */
     private void switchPlayerTurn() {
         switch (playerTurn) {
-            case ONE:
-                playerTurn = PlayerTurn.TWO;
+            case 0:
+                playerTurn = 1;
                 break;
-            case TWO:
-                playerTurn = PlayerTurn.ONE;
+            case 1:
+                playerTurn = 0;
                 break;
         }
     }
@@ -97,7 +91,7 @@ public class QuartoState extends GameState {
      */
     public boolean pickedPiece(int playerId, int pickedPieceId) {
         if (pool[pickedPieceId] == null ||
-                playerId != playerTurn.num ||
+                playerId != playerTurn ||
                 typeTurn != TypeTurn.PICK
         ) {
             /* piece not in pool, not acting player's turn, or not picking turn */
@@ -126,7 +120,7 @@ public class QuartoState extends GameState {
      */
     public boolean placedPiece(int playerId, int boardRow, int boardCol) {
         if (board[boardRow][boardCol] == null &&
-                playerId == playerTurn.num &&
+                playerId == playerTurn &&
                 typeTurn == TypeTurn.PLACE
         ) {
             /* spot on board is empty, it is the acting player's turn, and is placing turn */
@@ -144,6 +138,8 @@ public class QuartoState extends GameState {
             return false;
         }
     }
+
+    // TODO: DO WE NEED GETTERS?
 
     /**
      * Returns a string characterization of the QuartoState object.
@@ -186,7 +182,7 @@ public class QuartoState extends GameState {
         }
 
         return
-                "Player turn: " + playerTurn.toString() + "\n" +
+                "Player turn: " + playerTurn + "\n" +
                 "Type turn: " + typeTurn.toString() + "\n" +
                 toPlaceText +
                 poolText +

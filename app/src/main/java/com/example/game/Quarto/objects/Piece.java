@@ -46,4 +46,14 @@ public class Piece {
     }
 
     public int getPieceId() {return pieceId;}
+
+    public Shade getShade() {return shade;}
+
+    public Shape getShape() {return shape;}
+
+    public Fill getFill() {return fill;}
+
+    public Height getHeight() {return height;}
+
+    public int getImageId() {return imageId;}
 }
