@@ -1,4 +1,4 @@
-package com.example.game.Quarto.misc;
+package com.example.game.Quarto.objects;
 
 import com.example.game.R;
 
