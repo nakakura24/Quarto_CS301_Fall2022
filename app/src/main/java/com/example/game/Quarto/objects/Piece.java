@@ -9,7 +9,7 @@ public class Piece {
     public enum Fill {SOLID, HOLLOW}
     public enum Height {TALL, SHORT}
 
-    public int pieceId;
+    private int pieceId;
     private final Shade shade;
     private final Shape shape;
     private final Fill fill;
@@ -44,4 +44,6 @@ public class Piece {
 
         this.imageId = imageIds[pieceNum];
     }
+
+    public int getPieceId() {return pieceId;}
 }

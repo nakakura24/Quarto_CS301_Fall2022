@@ -2,7 +2,6 @@ package com.example.game.Quarto.infoMessage;
 
 import com.example.game.GameFramework.infoMessage.GameState;
 import com.example.game.Quarto.objects.Piece;
-
 import java.util.Random;
 
 public class QuartoState extends GameState {
@@ -47,13 +46,13 @@ public class QuartoState extends GameState {
         this.playerTurn = src.playerTurn; // copying player turn
         this.typeTurn = src.typeTurn; // copying turn type
 
-        // copying src pool into new src
+        // copying src pool into new pool
         this.pool = new Piece[16];
         for (int i = 0; i < 16; i++) {
             this.pool[i] = src.pool[i];
         }
 
-        // copying src board into new copy board
+        // copying src board into new board
         this.board = new Piece[4][4];
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 4; j++) {
@@ -89,8 +88,6 @@ public class QuartoState extends GameState {
         }
     }
 
-    // FOR PICKEDPIECE AND PLACED PIECE, MAKE SURE TYPETURN IS THE RIGHT TURN.
-
     /**
      * Sets the piece to place if a valid move is made.
      *
@@ -99,12 +96,15 @@ public class QuartoState extends GameState {
      * @return if the move is valid
      */
     public boolean pickedPiece(int playerId, int pickedPieceId) {
-        if (pool[pickedPieceId] == null || playerId != playerTurn.num) {
-            /* piece not in pool or not acting player's turn */
+        if (pool[pickedPieceId] == null ||
+                playerId != playerTurn.num ||
+                typeTurn != TypeTurn.PICK
+        ) {
+            /* piece not in pool, not acting player's turn, or not picking turn */
             return false;
         }
         else {
-            /* piece in pool and it is the acting player's turn */
+            /* piece in pool, it is the acting player's turn, and is picking turn */
             toPlace = pool[pickedPieceId]; // set piece to place as the selected piece
             pool[pickedPieceId] = null; // remove piece from pool
 
@@ -125,8 +125,11 @@ public class QuartoState extends GameState {
      * @return if the move is valid
      */
     public boolean placedPiece(int playerId, int boardRow, int boardCol) {
-        if (board[boardRow][boardCol] == null && playerId == playerTurn.num) {
-            /* spot on board is empty and it is the acting player's turn */
+        if (board[boardRow][boardCol] == null &&
+                playerId == playerTurn.num &&
+                typeTurn == TypeTurn.PLACE
+        ) {
+            /* spot on board is empty, it is the acting player's turn, and is placing turn */
             board[boardRow][boardCol] = toPlace; // place piece at spot on board
             toPlace = null; // piece has been placed
 
@@ -137,7 +140,7 @@ public class QuartoState extends GameState {
             return true;
         }
         else {
-            /* spot on board is not empty or it is not the acting player's turn */
+            /* spot on board is not empty, it is not the acting player's turn, or not placing turn */
             return false;
         }
     }
@@ -152,7 +155,7 @@ public class QuartoState extends GameState {
         /* putting piece to place into string form */
         String toPlaceText = "Piece to place: ";
         if (toPlace == null) {toPlaceText += "X";}
-        else {toPlaceText += toPlace.pieceId + "";}
+        else {toPlaceText += toPlace.getPieceId() + "";}
         toPlaceText += "\n";
 
         /* putting pool in human readable string form */
@@ -162,7 +165,7 @@ public class QuartoState extends GameState {
                 poolText += "X  ";
             }
             else {
-                poolText += pool[i].pieceId + "  ";
+                poolText += pool[i].getPieceId() + "  ";
             }
         }
         poolText += "\n";
@@ -175,8 +178,8 @@ public class QuartoState extends GameState {
                     boardText += "X   ";
                 }
                 else {
-                    boardText += board[i][j].pieceId + "  ";
-                    if (board[i][j].pieceId < 9) {boardText += " ";}
+                    boardText += board[i][j].getPieceId() + "  ";
+                    if (board[i][j].getPieceId() < 9) {boardText += " ";}
                 }
             }
             boardText += "\n";
