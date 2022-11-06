@@ -29,6 +29,8 @@ public class QuartoLocalGame extends LocalGame {
 
     }
 
+    // TODO: SET VALID MOVE REQUIREMENTS FROM GAMESTATE TO CANMOVE AND MAKEMOVE
+
     /**
      * Tell whether the given player is allowed to make a move at the
      * present point in the game.

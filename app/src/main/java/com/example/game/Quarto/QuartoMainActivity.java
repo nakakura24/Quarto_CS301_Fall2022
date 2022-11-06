@@ -27,7 +27,7 @@ public class QuartoMainActivity extends GameMainActivity {
         // add human player type to the list
         playerTypes.add(new GamePlayerType("Local Human Player") {
             public GamePlayer createPlayer(String name) {
-                return new QuartoHumanPlayer(name);
+                return new QuartoHumanPlayer(name, R.layout.quarto_main);
             }
         });
 

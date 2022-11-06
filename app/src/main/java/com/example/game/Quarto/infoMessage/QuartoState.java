@@ -139,7 +139,13 @@ public class QuartoState extends GameState {
         }
     }
 
-    // TODO: DO WE NEED GETTERS?
+    public Piece[] getPool() {return pool;}
+
+    public Piece[][] getBoard() {return board;}
+
+    public int getPlayerTurn() {return playerTurn;}
+
+    public TypeTurn getTypeTurn() {return typeTurn;}
 
     /**
      * Returns a string characterization of the QuartoState object.
@@ -187,5 +193,9 @@ public class QuartoState extends GameState {
                 toPlaceText +
                 poolText +
                 boardText + "\n";
+    }
+
+    public boolean equals(Object object) {
+        return false;
     }
 }
