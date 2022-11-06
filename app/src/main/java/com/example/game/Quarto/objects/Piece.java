@@ -7,7 +7,7 @@ public class Piece {
     public enum Fill {SOLID, HOLLOW}
     public enum Height {TALL, SHORT}
 
-    private int pieceId;
+    private final int pieceId;
     private final Shade shade;
     private final Shape shape;
     private final Fill fill;
