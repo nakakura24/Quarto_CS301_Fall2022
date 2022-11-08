@@ -28,10 +28,16 @@ public class QuartoSmartComputer extends QuartoComputerPlayer {
 
     }
 
+    /**
+        returns an ArrayList of pieces that it cannot return (because the human would win)
+     **/
     private ArrayList<Piece> pickCheck() {
         return null;
     }
 
+    /**
+        returns an ArrayList of spaces that will cause the computer to win if a piece is placed there
+     **/
     private ArrayList<Point> placeCheck() {
         return null;
     }
