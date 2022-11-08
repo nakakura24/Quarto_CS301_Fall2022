@@ -11,6 +11,7 @@ import com.example.game.GameFramework.players.GamePlayer;
 import com.example.game.Quarto.infoMessage.QuartoState;
 import com.example.game.Quarto.players.QuartoComputerPlayer;
 import com.example.game.Quarto.players.QuartoHumanPlayer;
+import com.example.game.Quarto.players.QuartoSmartComputer;
 import com.example.game.R;
 
 
@@ -32,16 +33,20 @@ public class QuartoMainActivity extends GameMainActivity {
         });
 
         // add computer player type to the list
-        playerTypes.add(new GamePlayerType("Computer Player") {
+        playerTypes.add(new GamePlayerType("Computer Player (Easy)") {
             public GamePlayer createPlayer(String name) {
                 return new QuartoComputerPlayer(name);
             }
         });
 
-        // TODO: ADD SMART COMPUTER CODE
+        playerTypes.add(new GamePlayerType("Computer Player (Hard)") {
+            public GamePlayer createPlayer(String name) {
+                return new QuartoSmartComputer(name);
+            }
+        });
 
         // create GameConfig object for the quarto game
-        GameConfig config = new GameConfig(playerTypes, 1, 2, "Quarto", PORT_NUMBER);
+        GameConfig config = new GameConfig(playerTypes, 2, 2, "Quarto", PORT_NUMBER);
 
         // add a human player to the config and set it as player 1
         config.addPlayer("Human",0);
