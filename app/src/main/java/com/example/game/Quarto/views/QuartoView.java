@@ -20,6 +20,7 @@ public class QuartoView extends FlashSurfaceView {
 
     private final float screenWidth, screenHeight;
 
+    // TODO: Set percentages
     /* sizes and locations (in %) */
     private static final float PIECE_WIDTH = 0;
     private static final float PIECE_TALL_HEIGHT = 0;
@@ -28,6 +29,7 @@ public class QuartoView extends FlashSurfaceView {
     private static final float BOARD_TOP = 0;
     private static final float BOARD_HGAP = 0;
     private static final float BOARD_VGAP = 0;
+    private static final float BOARD_WIDTH = 0;
     private static final float POOL_TOP = 0;
     private static final float POOL_HGAP = 0;
     private static final float POOL_VGAP = 0;
@@ -83,7 +85,7 @@ public class QuartoView extends FlashSurfaceView {
         drawPool(g);
     }
 
-    public void drawBoard(Canvas g) {
+    private void drawBoard(Canvas g) {
         for (int i = 0 ; i < 4 ; i++) {
             for (int j = 0 ; j < 4 ; j++) {
                 drawBoardCircleWithPiece(g, i, j);
@@ -91,7 +93,7 @@ public class QuartoView extends FlashSurfaceView {
         }
     }
 
-    public void drawBoardCircleWithPiece(Canvas g, int row, int col) {
+    private void drawBoardCircleWithPiece(Canvas g, int row, int col) {
         // TODO: CODE HERE TO DRAW CIRCLE
 
         /* draw piece in circle if gamestate is not null and there is a piece in circle */
@@ -100,7 +102,7 @@ public class QuartoView extends FlashSurfaceView {
         }
     }
 
-    public void drawPool(Canvas g) {
+    private void drawPool(Canvas g) {
         drawPoolMarker(g);
         for (int i = 0 ; i < 2 ; i++) {
             for (int j = 0 ; j < 8 ; j++) {
@@ -109,11 +111,11 @@ public class QuartoView extends FlashSurfaceView {
         }
     }
 
-    public void drawPoolMarker(Canvas g) {
+    private void drawPoolMarker(Canvas g) {
         // called in drawPool()
     }
 
-    public void drawPiece(Canvas g, Piece piece, Rect rect) {
+    private void drawPiece(Canvas g, Piece piece, Rect rect) {
         // called in drawPool() and drawBoardCircleWithPiece()
     }
 
