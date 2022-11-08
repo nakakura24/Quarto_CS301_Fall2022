@@ -1,12 +1,17 @@
 package com.example.game.Quarto.players;
 
+import android.graphics.Color;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.example.game.GameFramework.GameMainActivity;
 import com.example.game.GameFramework.infoMessage.GameInfo;
+import com.example.game.GameFramework.infoMessage.IllegalMoveInfo;
+import com.example.game.GameFramework.infoMessage.NotYourTurnInfo;
 import com.example.game.GameFramework.players.GameHumanPlayer;
+import com.example.game.Quarto.infoMessage.QuartoState;
 import com.example.game.Quarto.views.QuartoView;
+import com.example.game.R;
 
 public class QuartoHumanPlayer extends GameHumanPlayer
         implements View.OnTouchListener, View.OnClickListener {
@@ -30,8 +35,9 @@ public class QuartoHumanPlayer extends GameHumanPlayer
      * @return the GUI's top object.
      */
     @Override
-    public View getTopView() {
-        return null;
+    public View getTopView()
+    {
+        return myActivity.findViewById(R.id.top_gui_layout);
     }
 
     /**
@@ -41,12 +47,32 @@ public class QuartoHumanPlayer extends GameHumanPlayer
      */
     @Override
     public void receiveInfo(GameInfo info) {
+        if (quartoView == null) return;
 
+        if(info instanceof IllegalMoveInfo || info instanceof NotYourTurnInfo)
+        {
+            //if the move is out of turn or illegal, flash the screen
+            quartoView.flash(Color.RED, 50);
+        }
+        else if (!(info instanceof QuartoState)) return;
+        else
+        {
+            quartoView.setState((QuartoState) info);
+            quartoView.invalidate();
+        }
     }
 
+    /**
+        sets the current player as the activity's GUI
+     **/
     @Override
     public void setAsGui(GameMainActivity activity) {
+        //load the layout resource for the new configuration
+        activity.setContentView(layoutId);
 
+        //set the surfaceView instance variable
+        quartoView = (QuartoView)myActivity.findViewById(R.id.quartoView);
+        quartoView.setOnTouchListener(this);
     }
 
     /**
@@ -56,7 +82,7 @@ public class QuartoHumanPlayer extends GameHumanPlayer
      */
     @Override
     public void onClick(View v) {
-
+        //TODO: IMPLEMENT BUTTONS
     }
 
     /**
@@ -69,6 +95,7 @@ public class QuartoHumanPlayer extends GameHumanPlayer
      * @return True if the listener has consumed the event, false otherwise.
      */
     @Override
+    //TODO: IMPLEMENT SURFACEVIEW INTERACTIONS
     public boolean onTouch(View v, MotionEvent event) {
         return false;
     }
