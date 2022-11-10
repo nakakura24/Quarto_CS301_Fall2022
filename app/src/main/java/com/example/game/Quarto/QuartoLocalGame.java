@@ -3,6 +3,8 @@ package com.example.game.Quarto;
 import com.example.game.GameFramework.LocalGame;
 import com.example.game.GameFramework.actionMessage.GameAction;
 import com.example.game.GameFramework.players.GamePlayer;
+import com.example.game.Quarto.actions.QuartoPickAction;
+import com.example.game.Quarto.actions.QuartoPlaceAction;
 import com.example.game.Quarto.infoMessage.QuartoState;
 
 public class QuartoLocalGame extends LocalGame {
@@ -26,10 +28,8 @@ public class QuartoLocalGame extends LocalGame {
      */
     @Override
     protected void sendUpdatedStateTo(GamePlayer p) {
-
+        p.sendInfo(new QuartoState((QuartoState) state));
     }
-
-    // TODO: SET VALID MOVE REQUIREMENTS FROM GAMESTATE TO CANMOVE AND MAKEMOVE
 
     /**
      * Tell whether the given player is allowed to make a move at the
@@ -40,7 +40,7 @@ public class QuartoLocalGame extends LocalGame {
      */
     @Override
     protected boolean canMove(int playerIdx) {
-        return false;
+        return playerIdx == ((QuartoState)state).getPlayerTurn();
     }
 
     /**
@@ -63,6 +63,42 @@ public class QuartoLocalGame extends LocalGame {
      */
     @Override
     protected boolean makeMove(GameAction action) {
-        return false;
+        QuartoState state = (QuartoState) super.state;
+
+        // get id of player who made the move
+        int playerId = getPlayerIdx(action.getPlayer());
+
+        if (action instanceof QuartoPickAction) {
+            QuartoPickAction pick = (QuartoPickAction) action;
+
+            // get piece id of piece that was picked
+            int pieceId = pick.getPickedPieceId();
+
+            /* if piece is no longer in the pool or not a picking turn; picking move is illegal */
+            if (state.getPool()[pieceId] == null ||
+                    state.getTypeTurn() != QuartoState.TypeTurn.PICK) {
+                return false;
+            }
+            else {
+                state.pickedPiece(playerId, pieceId);
+            }
+        }
+        else if (action instanceof QuartoPlaceAction) {
+            QuartoPlaceAction place = (QuartoPlaceAction) action;
+
+            // get row and col of spot that was picked
+            int row = place.getBoardRow();
+            int col = place.getBoardCol();
+
+            /* if spot is occupied or not a placing turn; placing move is illegal */
+            if (state.getBoard()[row][col] != null ||
+                    state.getTypeTurn() != QuartoState.TypeTurn.PLACE) {
+                return false;
+            }
+            else {
+                state.placedPiece(playerId, row, col);
+            }
+        }
+        return true;
     }
 }

@@ -90,24 +90,14 @@ public class QuartoState extends GameState {
      * @return if the move is valid
      */
     public boolean pickedPiece(int playerId, int pickedPieceId) {
-        if (pool[pickedPieceId] == null ||
-                playerId != playerTurn ||
-                typeTurn != TypeTurn.PICK
-        ) {
-            /* piece not in pool, not acting player's turn, or not picking turn */
-            return false;
-        }
-        else {
-            /* piece in pool, it is the acting player's turn, and is picking turn */
-            toPlace = pool[pickedPieceId]; // set piece to place as the selected piece
-            pool[pickedPieceId] = null; // remove piece from pool
+        toPlace = pool[pickedPieceId]; // set piece to place as the selected piece
+        pool[pickedPieceId] = null; // remove piece from pool
 
-            /* opponent's turn to place the selected piece */
-            switchPlayerTurn(); // set to opponent turn
-            typeTurn = TypeTurn.PLACE; // set to placing turn
+        /* opponent's turn to place the selected piece */
+        switchPlayerTurn(); // set to opponent turn
+        typeTurn = TypeTurn.PLACE; // set to placing turn
 
-            return true;
-        }
+        return true;
     }
 
     /**
@@ -119,24 +109,14 @@ public class QuartoState extends GameState {
      * @return if the move is valid
      */
     public boolean placedPiece(int playerId, int boardRow, int boardCol) {
-        if (board[boardRow][boardCol] == null &&
-                playerId == playerTurn &&
-                typeTurn == TypeTurn.PLACE
-        ) {
-            /* spot on board is empty, it is the acting player's turn, and is placing turn */
-            board[boardRow][boardCol] = toPlace; // place piece at spot on board
-            toPlace = null; // piece has been placed
+        board[boardRow][boardCol] = toPlace; // place piece at spot on board
+        toPlace = null; // piece has been placed
 
-            /* current player's turn to select piece for opponent */
-            // do not have to change player turn
-            typeTurn = TypeTurn.PICK; // set to choosing turn
+        /* current player's turn to select piece for opponent */
+        // do not have to change player turn
+        typeTurn = TypeTurn.PICK; // set to choosing turn
 
-            return true;
-        }
-        else {
-            /* spot on board is not empty, it is not the acting player's turn, or not placing turn */
-            return false;
-        }
+        return true;
     }
 
     public Piece[] getPool() {return pool;}
