@@ -130,6 +130,8 @@ public class QuartoState extends GameState {
     public int getLastCol() {return lastCol;}
 
 
+    public Piece getToPlace() {return toPlace;}
+
     /**
      * Returns a string characterization of the QuartoState object.
      *

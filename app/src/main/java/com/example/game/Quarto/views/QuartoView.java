@@ -1,6 +1,8 @@
 package com.example.game.Quarto.views;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -95,18 +97,19 @@ public class QuartoView extends FlashSurfaceView {
 
     private void drawBoardCircleWithPiece(Canvas g, int row, int col) {
         // TODO: CODE HERE TO DRAW CIRCLE
-
+        g.drawOval(row, col, (int) (row + BOARD_WIDTH) - 15, (int) (col + BOARD_WIDTH) - 15, boardCirclePaint);
         /* draw piece in circle if gamestate is not null and there is a piece in circle */
         if (state != null && state.getBoard()[row][col] != null) {
-
+            // drawPiece(g, );
         }
     }
 
     private void drawPool(Canvas g) {
         drawPoolMarker(g);
+        Piece[] piecePool = state.getPool();
         for (int i = 0 ; i < 2 ; i++) {
             for (int j = 0 ; j < 8 ; j++) {
-
+                drawPiece(g, piecePool[(i * 8) + j], new Rect());
             }
         }
     }
@@ -114,10 +117,17 @@ public class QuartoView extends FlashSurfaceView {
     // TODO: Piece is removed from pool so it won't be drawn inside marker; perhaps get piece from toPlace and draw it manually
     private void drawPoolMarker(Canvas g) {
         // called in drawPool()
+        // TODO: CREATE NEW RECTANGLE OBJECT (DUMMIED UP)
+        Rect rect = new Rect();
     }
 
     private void drawPiece(Canvas g, Piece piece, Rect rect) {
         // called in drawPool() and drawBoardCircleWithPiece()
+        // iterate through imageId array for game pieces
+        for (int i = 0; i < imageIds.length; i++) {
+            Bitmap image = BitmapFactory.decodeResource(getResources(), imageIds[i]);
+            g.drawBitmap(image, null, rect, null);
+        }
     }
 
     // NOTE: TOUCHTOBOARD AND TOUCHTOSPOT SHOULD BE CALLED DEPENDING ON TYPETURN IN HUMANPLAYER
