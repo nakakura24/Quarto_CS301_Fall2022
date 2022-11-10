@@ -13,6 +13,7 @@ public class QuartoState extends GameState {
     private int playerTurn;
     private TypeTurn typeTurn;
     private Piece toPlace;
+    private int lastRow, lastCol; // used to find possible 4-in-a-rows
 
     /**
      * Default constructor for QuartoState.
@@ -40,6 +41,7 @@ public class QuartoState extends GameState {
     public QuartoState(QuartoState src) {
         this.playerTurn = src.playerTurn; // copying player turn
         this.typeTurn = src.typeTurn; // copying turn type
+        this.toPlace = src.toPlace; // copying piece to place
 
         // copying src pool into new pool
         this.pool = new Piece[16];
@@ -87,17 +89,14 @@ public class QuartoState extends GameState {
      *
      * @param playerId id of the player who made the move
      * @param pickedPieceId id of the piece that the player selected
-     * @return if the move is valid
      */
-    public boolean pickedPiece(int playerId, int pickedPieceId) {
+    public void pickPiece(int playerId, int pickedPieceId) {
         toPlace = pool[pickedPieceId]; // set piece to place as the selected piece
         pool[pickedPieceId] = null; // remove piece from pool
 
         /* opponent's turn to place the selected piece */
         switchPlayerTurn(); // set to opponent turn
         typeTurn = TypeTurn.PLACE; // set to placing turn
-
-        return true;
     }
 
     /**
@@ -106,17 +105,16 @@ public class QuartoState extends GameState {
      * @param playerId id of the player who made the move
      * @param boardRow row index of the spot that the player selected
      * @param boardCol column index of the spot that the player selected
-     * @return if the move is valid
      */
-    public boolean placedPiece(int playerId, int boardRow, int boardCol) {
+    public void placePiece(int playerId, int boardRow, int boardCol) {
         board[boardRow][boardCol] = toPlace; // place piece at spot on board
         toPlace = null; // piece has been placed
+        lastRow = boardRow; // set last placed row
+        lastCol = boardCol; // set last placed col
 
         /* current player's turn to select piece for opponent */
         // do not have to change player turn
         typeTurn = TypeTurn.PICK; // set to choosing turn
-
-        return true;
     }
 
     public Piece[] getPool() {return pool;}
@@ -126,6 +124,11 @@ public class QuartoState extends GameState {
     public int getPlayerTurn() {return playerTurn;}
 
     public TypeTurn getTypeTurn() {return typeTurn;}
+
+    public int getLastRow() {return lastRow;}
+
+    public int getLastCol() {return lastCol;}
+
 
     /**
      * Returns a string characterization of the QuartoState object.

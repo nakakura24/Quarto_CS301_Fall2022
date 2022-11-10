@@ -111,6 +111,7 @@ public class QuartoView extends FlashSurfaceView {
         }
     }
 
+    // TODO: Piece is removed from pool so it won't be drawn inside marker; perhaps get piece from toPlace and draw it manually
     private void drawPoolMarker(Canvas g) {
         // called in drawPool()
     }

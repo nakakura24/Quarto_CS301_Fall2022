@@ -6,8 +6,11 @@ import com.example.game.GameFramework.players.GamePlayer;
 import com.example.game.Quarto.actions.QuartoPickAction;
 import com.example.game.Quarto.actions.QuartoPlaceAction;
 import com.example.game.Quarto.infoMessage.QuartoState;
+import com.example.game.Quarto.objects.Piece;
 
 public class QuartoLocalGame extends LocalGame {
+    private int placeCount; // counts how many pieces have been placed; used for gameover check
+
     public QuartoLocalGame() {
         super();
         state = new QuartoState();
@@ -52,7 +55,52 @@ public class QuartoLocalGame extends LocalGame {
      */
     @Override
     protected String checkIfGameOver() {
+        QuartoState state = (QuartoState) super.state;
+        Piece[][] board = state.getBoard();
+        int row = state.getLastRow();
+        int col = state.getLastCol();
+
+        Piece.Shade shade = board[row][col].getShade();
+        Piece.Shape shape = board[row][col].getShape();
+        Piece.Fill fill = board[row][col].getFill();
+        Piece.Height height = board[row][col].getHeight();
+        int numShade, numShape, numFill, numHeight;
+
+        /* check vertical win */
+        for (int i = 0 ; i < 4 ; i++) {
+            // TODO: make helper methods for each vertical, horizontal, and diagonal. OR them together to determine if winner.
+        }
+
+        /* check horizontal win */
+        for (int j = 0 ; j < 4 ; j++) {
+
+        }
+
+        /* check top-left to bot-right win */
+        if (row == col) {
+            for (int n = 0 ; n < 4 ; n++) {
+
+            }
+        }
+        /* check top-right to bot-left win */
+        else if (row == 3-col) {
+            for (int n = 0 ; n < 4 ; n++) {
+
+            }
+        }
         return null;
+    }
+
+    public boolean horizontalWin() {
+        return false;
+    }
+
+    public boolean verticalWin() {
+        return false;
+    }
+
+    public boolean diagonalWin() {
+        return false;
     }
 
     /**
@@ -80,7 +128,7 @@ public class QuartoLocalGame extends LocalGame {
                 return false;
             }
             else {
-                state.pickedPiece(playerId, pieceId);
+                state.pickPiece(playerId, pieceId);
             }
         }
         else if (action instanceof QuartoPlaceAction) {
@@ -96,7 +144,8 @@ public class QuartoLocalGame extends LocalGame {
                 return false;
             }
             else {
-                state.placedPiece(playerId, row, col);
+                state.placePiece(playerId, row, col);
+                placeCount++; // piece successfully placed; increment number of pieces on board
             }
         }
         return true;
