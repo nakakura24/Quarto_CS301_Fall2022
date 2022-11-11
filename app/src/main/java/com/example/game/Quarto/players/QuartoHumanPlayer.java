@@ -83,6 +83,7 @@ public class QuartoHumanPlayer extends GameHumanPlayer
     @Override
     public void onClick(View v) {
         //TODO: IMPLEMENT BUTTONS
+
     }
 
     /**
@@ -97,6 +98,7 @@ public class QuartoHumanPlayer extends GameHumanPlayer
     @Override
     //TODO: IMPLEMENT SURFACEVIEW INTERACTIONS
     public boolean onTouch(View v, MotionEvent event) {
+
         return false;
     }
 }

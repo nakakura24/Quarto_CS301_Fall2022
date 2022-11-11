@@ -87,7 +87,7 @@ public class QuartoLocalGame extends LocalGame {
      * @param row
      * @return
      */
-    public boolean horizontalWin(Piece piece, int row) {
+    public static boolean horizontalWin(Piece piece, int row) {
         for (int col = 0 ; col < 4 ; col++) {
 
         }
@@ -100,7 +100,7 @@ public class QuartoLocalGame extends LocalGame {
      * @param col
      * @return
      */
-    public boolean verticalWin(Piece piece, int col) {
+    public static boolean verticalWin(Piece piece, int col) {
         for (int row = 0 ; row < 4 ; row++) {
 
         }
@@ -114,7 +114,7 @@ public class QuartoLocalGame extends LocalGame {
      * @param col
      * @return
      */
-    public boolean diagonalWin(Piece piece, int row, int col) {
+    public static boolean diagonalWin(Piece piece, int row, int col) {
         if (row == col) {
             for (int n = 0 ; n < 4 ; n++) {
 
