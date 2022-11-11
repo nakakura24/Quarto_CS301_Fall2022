@@ -100,7 +100,7 @@ public class QuartoView extends FlashSurfaceView {
         g.drawOval(row, col, (int) (row + BOARD_WIDTH) - 15, (int) (col + BOARD_WIDTH) - 15, boardCirclePaint);
         /* draw piece in circle if gamestate is not null and there is a piece in circle */
         if (state != null && state.getBoard()[row][col] != null) {
-            // drawPiece(g, );
+            drawPiece(g, state.getPool()[(row * 8) + col], new Rect());
         }
     }
 
