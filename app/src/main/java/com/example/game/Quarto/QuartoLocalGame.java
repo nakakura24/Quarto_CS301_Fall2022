@@ -11,11 +11,19 @@ import com.example.game.Quarto.objects.Piece;
 public class QuartoLocalGame extends LocalGame {
     private int placeCount = 0; // counts how many pieces have been placed; used for gameover check
 
+    /**
+     * Default constructor.
+     */
     public QuartoLocalGame() {
         super();
         state = new QuartoState();
     }
 
+    /**
+     * Copy constructor.
+     *
+     * @param gs QuartoState to copy.
+     */
     public QuartoLocalGame(QuartoState gs) {
         super();
         state = new QuartoState(gs);
@@ -78,14 +86,12 @@ public class QuartoLocalGame extends LocalGame {
         }
     }
 
-    // TODO: make helper methods for each vertical, horizontal, and diagonal. OR them together to determine if winner.
-
     /**
+     * Tells if a row has a winning 4-in-a-row.
      *
-     *
-     * @param piece
-     * @param row
-     * @return
+     * @param piece last placed piece
+     * @param row row to check
+     * @return if there is a 4-in-a-row or not.
      */
     public boolean horizontalWin(Piece piece, int row) {
         /* getting state and board */
@@ -111,11 +117,11 @@ public class QuartoLocalGame extends LocalGame {
     }
 
     /**
+     * Tells if a column has a winning 4-in-a-row.
      *
-     *
-     * @param piece
-     * @param col
-     * @return
+     * @param piece last placed piece
+     * @param col column to check
+     * @return if there is a 4-in-a-row or not.
      */
     public boolean verticalWin(Piece piece, int col) {
         /* getting state and board */
@@ -141,12 +147,12 @@ public class QuartoLocalGame extends LocalGame {
     }
 
     /**
+     * Tells if there is a diagonal 4-in-a-row.
      *
-     *
-     * @param piece
-     * @param row
-     * @param col
-     * @return
+     * @param piece last placed piece
+     * @param row row of last placed piece
+     * @param col col of last placed piece
+     * @return if there is a 4-in-a-row or not.
      */
     public boolean diagonalWin(Piece piece, int row, int col) {
         /* getting state and board */
