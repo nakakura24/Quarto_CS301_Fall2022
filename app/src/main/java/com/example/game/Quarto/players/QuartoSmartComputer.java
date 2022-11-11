@@ -153,9 +153,9 @@ public class QuartoSmartComputer extends QuartoComputerPlayer {
                     if (qState.getBoard()[row][col] == null)
                     {
                         //test whether the piece from the pool will win the game at this spot
-                        if (QuartoLocalGame.diagonalWin(tempPiece, row, col)
-                         || QuartoLocalGame.horizontalWin(tempPiece, row)
-                         || QuartoLocalGame.verticalWin(tempPiece, col))
+                        if (QuartoLocalGame.diagonalWin(qState, tempPiece, row, col)
+                         || QuartoLocalGame.horizontalWin(qState, tempPiece, row)
+                         || QuartoLocalGame.verticalWin(qState, tempPiece, col))
                         {
                             losingPieces.add(tempPiece); //add the losing piece
                         }
@@ -196,9 +196,9 @@ public class QuartoSmartComputer extends QuartoComputerPlayer {
                 //look for an empty space on the game board
                if(qState.getBoard()[row][col] == null) {
                    //test whether placing the piece at this spot will win the game
-                   if (QuartoLocalGame.diagonalWin(toPlace, row, col)
-                    || QuartoLocalGame.horizontalWin(toPlace, row)
-                    || QuartoLocalGame.verticalWin(toPlace, col))
+                   if (QuartoLocalGame.diagonalWin(qState, toPlace, row, col)
+                    || QuartoLocalGame.horizontalWin(qState, toPlace, row)
+                    || QuartoLocalGame.verticalWin(qState, toPlace, col))
                    {
                        winSpaces.add(new Point(row, col)); //add the winning space
                    }

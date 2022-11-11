@@ -27,6 +27,7 @@ public class QuartoView extends FlashSurfaceView {
     private static final float PIECE_WIDTH = 0;
     private static final float PIECE_TALL_HEIGHT = 0;
     private static final float PIECE_SHORT_HEIGHT = 0;
+    private static final float PIECE_SIZE_INCREASE = 0;
     private static final float HBORDER = 0;
     private static final float BOARD_TOP = 0;
     private static final float BOARD_HGAP = 0;
@@ -35,8 +36,6 @@ public class QuartoView extends FlashSurfaceView {
     private static final float POOL_TOP = 0;
     private static final float POOL_HGAP = 0;
     private static final float POOL_VGAP = 0;
-    private static final float MARKER_GAP = 0;
-    private static final float MARKER_WIDTH = 0;
 
     private static final Paint boardCirclePaint = new Paint();
     private static final Paint boardCirclePaintWin = new Paint();

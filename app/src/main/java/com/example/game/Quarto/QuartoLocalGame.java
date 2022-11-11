@@ -73,9 +73,9 @@ public class QuartoLocalGame extends LocalGame {
 
         Piece piece = board[row][col]; // last piece placed
 
-        if (horizontalWin(piece, row) ||
-                verticalWin(piece, col) ||
-                diagonalWin(piece, row, col)) {
+        if (horizontalWin(state, piece, row) ||
+                verticalWin(state, piece, col) ||
+                diagonalWin(state, piece, row, col)) {
             return playerNames[state.getPlayerTurn()] + " wins!";
         }
         else if (placeCount >= 16) {
@@ -93,9 +93,8 @@ public class QuartoLocalGame extends LocalGame {
      * @param row row to check
      * @return if there is a 4-in-a-row or not.
      */
-    public boolean horizontalWin(Piece piece, int row) {
-        /* getting state and board */
-        QuartoState state = (QuartoState) super.state;
+    public static boolean horizontalWin(QuartoState state, Piece piece, int row) {
+        /* getting board */
         Piece[][] board = state.getBoard();
 
         /* number of matching characteristics in the row */
@@ -105,7 +104,6 @@ public class QuartoLocalGame extends LocalGame {
         int numHeight = 0;
 
         /* check each characteristic in all columns of the given row */
-    public static boolean horizontalWin(Piece piece, int row) {
         for (int col = 0 ; col < 4 ; col++) {
             if (piece.getShade() == board[row][col].getShade()) numShade++;
             if (piece.getShape() == board[row][col].getShape()) numShape++;
@@ -124,9 +122,8 @@ public class QuartoLocalGame extends LocalGame {
      * @param col column to check
      * @return if there is a 4-in-a-row or not.
      */
-    public boolean verticalWin(Piece piece, int col) {
-        /* getting state and board */
-        QuartoState state = (QuartoState) super.state;
+    public static boolean verticalWin(QuartoState state, Piece piece, int col) {
+        /* getting board */
         Piece[][] board = state.getBoard();
 
         /* number of matching characteristics in the column */
@@ -136,7 +133,6 @@ public class QuartoLocalGame extends LocalGame {
         int numHeight = 0;
 
         /* check each characteristic in all row of the given column */
-    public static boolean verticalWin(Piece piece, int col) {
         for (int row = 0 ; row < 4 ; row++) {
             if (piece.getShade() == board[row][col].getShade()) numShade++;
             if (piece.getShape() == board[row][col].getShape()) numShape++;
@@ -156,9 +152,8 @@ public class QuartoLocalGame extends LocalGame {
      * @param col col of last placed piece
      * @return if there is a 4-in-a-row or not.
      */
-    public boolean diagonalWin(Piece piece, int row, int col) {
-        /* getting state and board */
-        QuartoState state = (QuartoState) super.state;
+    public static boolean diagonalWin(QuartoState state, Piece piece, int row, int col) {
+        /* getting board */
         Piece[][] board = state.getBoard();
 
         /* number of matching characteristics in the diagonal */
@@ -169,8 +164,6 @@ public class QuartoLocalGame extends LocalGame {
 
         if (row == col) { // possible to have top-left to bot-right diagonal
             /* check each characteristic in all diagonal spots */
-    public static boolean diagonalWin(Piece piece, int row, int col) {
-        if (row == col) {
             for (int n = 0 ; n < 4 ; n++) {
                 if (piece.getShade() == board[n][n].getShade()) numShade++;
                 if (piece.getShape() == board[n][n].getShape()) numShape++;
