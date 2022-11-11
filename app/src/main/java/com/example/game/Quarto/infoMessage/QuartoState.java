@@ -127,6 +127,8 @@ public class QuartoState extends GameState {
 
     public TypeTurn getTypeTurn() {return typeTurn;}
 
+    public Piece getToPlace() {return toPlace;}
+
     /**
      * Returns a string characterization of the QuartoState object.
      *
