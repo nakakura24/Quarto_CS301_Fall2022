@@ -42,6 +42,8 @@ public class QuartoState extends GameState {
         this.playerTurn = src.playerTurn; // copying player turn
         this.typeTurn = src.typeTurn; // copying turn type
         this.toPlace = src.toPlace; // copying piece to place
+        this.lastRow = src.lastRow;
+        this.lastCol = src.lastCol;
 
         // copying src pool into new pool
         this.pool = new Piece[16];
@@ -87,10 +89,9 @@ public class QuartoState extends GameState {
     /**
      * Sets the piece to place if a valid move is made.
      *
-     * @param playerId id of the player who made the move
      * @param pickedPieceId id of the piece that the player selected
      */
-    public void pickPiece(int playerId, int pickedPieceId) {
+    public void pickPiece(int pickedPieceId) {
         toPlace = pool[pickedPieceId]; // set piece to place as the selected piece
         pool[pickedPieceId] = null; // remove piece from pool
 
@@ -102,11 +103,10 @@ public class QuartoState extends GameState {
     /**
      * Places the piece to place on the board if a valid move is made.
      *
-     * @param playerId id of the player who made the move
      * @param boardRow row index of the spot that the player selected
      * @param boardCol column index of the spot that the player selected
      */
-    public void placePiece(int playerId, int boardRow, int boardCol) {
+    public void placePiece(int boardRow, int boardCol) {
         board[boardRow][boardCol] = toPlace; // place piece at spot on board
         toPlace = null; // piece has been placed
         lastRow = boardRow; // set last placed row
@@ -125,12 +125,11 @@ public class QuartoState extends GameState {
 
     public TypeTurn getTypeTurn() {return typeTurn;}
 
+    public Piece getToPlace() {return toPlace;}
+
     public int getLastRow() {return lastRow;}
 
     public int getLastCol() {return lastCol;}
-
-
-    public Piece getToPlace() {return toPlace;}
 
     /**
      * Returns a string characterization of the QuartoState object.

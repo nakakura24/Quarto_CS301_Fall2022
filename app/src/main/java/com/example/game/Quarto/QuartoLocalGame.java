@@ -55,52 +55,79 @@ public class QuartoLocalGame extends LocalGame {
      */
     @Override
     protected String checkIfGameOver() {
+        /* getting state and board */
         QuartoState state = (QuartoState) super.state;
         Piece[][] board = state.getBoard();
-        int row = state.getLastRow();
-        int col = state.getLastCol();
 
-        Piece.Shade shade = board[row][col].getShade();
-        Piece.Shape shape = board[row][col].getShape();
-        Piece.Fill fill = board[row][col].getFill();
-        Piece.Height height = board[row][col].getHeight();
-        int numShade, numShape, numFill, numHeight;
+        /* location of where last piece was placed */
+        int row = state.getLastRow(); // row of location
+        int col = state.getLastCol(); // column of location
 
-        /* check vertical win */
-        for (int i = 0 ; i < 4 ; i++) {
-            // TODO: make helper methods for each vertical, horizontal, and diagonal. OR them together to determine if winner.
+        Piece piece = board[row][col]; // last piece placed
+
+        if (horizontalWin(piece, row) ||
+                verticalWin(piece, col) ||
+                diagonalWin(piece, row, col)) {
+            return playerNames[state.getPlayerTurn()] + " wins!";
         }
+        else if (placeCount >= 16) {
+            return "It's a tie.";
+        }
+        else {
+            return null;
+        }
+    }
 
-        /* check horizontal win */
-        for (int j = 0 ; j < 4 ; j++) {
+    // TODO: make helper methods for each vertical, horizontal, and diagonal. OR them together to determine if winner.
+
+    /**
+     *
+     *
+     * @param piece
+     * @param row
+     * @return
+     */
+    public boolean horizontalWin(Piece piece, int row) {
+        for (int col = 0 ; col < 4 ; col++) {
 
         }
+    }
 
-        /* check top-left to bot-right win */
+    /**
+     *
+     *
+     * @param piece
+     * @param col
+     * @return
+     */
+    public boolean verticalWin(Piece piece, int col) {
+        for (int row = 0 ; row < 4 ; row++) {
+
+        }
+    }
+
+    /**
+     *
+     *
+     * @param piece
+     * @param row
+     * @param col
+     * @return
+     */
+    public boolean diagonalWin(Piece piece, int row, int col) {
         if (row == col) {
             for (int n = 0 ; n < 4 ; n++) {
 
             }
         }
-        /* check top-right to bot-left win */
         else if (row == 3-col) {
             for (int n = 0 ; n < 4 ; n++) {
 
             }
         }
-        return null;
-    }
-
-    public boolean horizontalWin() {
-        return false;
-    }
-
-    public boolean verticalWin() {
-        return false;
-    }
-
-    public boolean diagonalWin() {
-        return false;
+        else {
+            return false;
+        }
     }
 
     /**
@@ -112,9 +139,6 @@ public class QuartoLocalGame extends LocalGame {
     @Override
     protected boolean makeMove(GameAction action) {
         QuartoState state = (QuartoState) super.state;
-
-        // get id of player who made the move
-        int playerId = getPlayerIdx(action.getPlayer());
 
         if (action instanceof QuartoPickAction) {
             QuartoPickAction pick = (QuartoPickAction) action;
@@ -128,7 +152,7 @@ public class QuartoLocalGame extends LocalGame {
                 return false;
             }
             else {
-                state.pickPiece(playerId, pieceId);
+                state.pickPiece(pieceId);
             }
         }
         else if (action instanceof QuartoPlaceAction) {
@@ -144,7 +168,7 @@ public class QuartoLocalGame extends LocalGame {
                 return false;
             }
             else {
-                state.placePiece(playerId, row, col);
+                state.placePiece(row, col);
                 placeCount++; // piece successfully placed; increment number of pieces on board
             }
         }
