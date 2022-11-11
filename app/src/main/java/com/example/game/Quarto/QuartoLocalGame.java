@@ -9,7 +9,7 @@ import com.example.game.Quarto.infoMessage.QuartoState;
 import com.example.game.Quarto.objects.Piece;
 
 public class QuartoLocalGame extends LocalGame {
-    private int placeCount; // counts how many pieces have been placed; used for gameover check
+    private int placeCount = 0; // counts how many pieces have been placed; used for gameover check
 
     public QuartoLocalGame() {
         super();
@@ -88,9 +88,26 @@ public class QuartoLocalGame extends LocalGame {
      * @return
      */
     public boolean horizontalWin(Piece piece, int row) {
-        for (int col = 0 ; col < 4 ; col++) {
+        /* getting state and board */
+        QuartoState state = (QuartoState) super.state;
+        Piece[][] board = state.getBoard();
 
+        /* number of matching characteristics in the row */
+        int numShade = 0;
+        int numShape = 0;
+        int numFill = 0;
+        int numHeight = 0;
+
+        /* check each characteristic in all columns of the given row */
+        for (int col = 0 ; col < 4 ; col++) {
+            if (piece.getShade() == board[row][col].getShade()) numShade++;
+            if (piece.getShape() == board[row][col].getShape()) numShape++;
+            if (piece.getFill() == board[row][col].getFill()) numFill++;
+            if (piece.getHeight() == board[row][col].getHeight()) numHeight++;
         }
+
+        /* return if any of the characteristics is 4-in-a-row */
+        return numShade == 4 || numShape == 4 || numFill == 4 || numHeight == 4;
     }
 
     /**
@@ -101,9 +118,26 @@ public class QuartoLocalGame extends LocalGame {
      * @return
      */
     public boolean verticalWin(Piece piece, int col) {
-        for (int row = 0 ; row < 4 ; row++) {
+        /* getting state and board */
+        QuartoState state = (QuartoState) super.state;
+        Piece[][] board = state.getBoard();
 
+        /* number of matching characteristics in the column */
+        int numShade = 0;
+        int numShape = 0;
+        int numFill = 0;
+        int numHeight = 0;
+
+        /* check each characteristic in all row of the given column */
+        for (int row = 0 ; row < 4 ; row++) {
+            if (piece.getShade() == board[row][col].getShade()) numShade++;
+            if (piece.getShape() == board[row][col].getShape()) numShape++;
+            if (piece.getFill() == board[row][col].getFill()) numFill++;
+            if (piece.getHeight() == board[row][col].getHeight()) numHeight++;
         }
+
+        /* return if any of the characteristics is 4-in-a-row */
+        return numShade == 4 || numShape == 4 || numFill == 4 || numHeight == 4;
     }
 
     /**
@@ -115,19 +149,40 @@ public class QuartoLocalGame extends LocalGame {
      * @return
      */
     public boolean diagonalWin(Piece piece, int row, int col) {
-        if (row == col) {
-            for (int n = 0 ; n < 4 ; n++) {
+        /* getting state and board */
+        QuartoState state = (QuartoState) super.state;
+        Piece[][] board = state.getBoard();
 
+        /* number of matching characteristics in the diagonal */
+        int numShade = 0;
+        int numShape = 0;
+        int numFill = 0;
+        int numHeight = 0;
+
+        if (row == col) { // possible to have top-left to bot-right diagonal
+            /* check each characteristic in all diagonal spots */
+            for (int n = 0 ; n < 4 ; n++) {
+                if (piece.getShade() == board[n][n].getShade()) numShade++;
+                if (piece.getShape() == board[n][n].getShape()) numShape++;
+                if (piece.getFill() == board[n][n].getFill()) numFill++;
+                if (piece.getHeight() == board[n][n].getHeight()) numHeight++;
             }
         }
-        else if (row == 3-col) {
+        else if (row == 3-col) { // possible to have top-right to bot-left diagonal
+            /* check each characteristic in all diagonal spots */
             for (int n = 0 ; n < 4 ; n++) {
-
+                if (piece.getShade() == board[n][3-n].getShade()) numShade++;
+                if (piece.getShape() == board[n][3-n].getShape()) numShape++;
+                if (piece.getFill() == board[n][3-n].getFill()) numFill++;
+                if (piece.getHeight() == board[n][3-n].getHeight()) numHeight++;
             }
         }
-        else {
+        else { // not possible to have a diagonal given the spot
             return false;
         }
+
+        /* return if any of the characteristics is 4-in-a-row */
+        return numShade == 4 || numShape == 4 || numFill == 4 || numHeight == 4;
     }
 
     /**
