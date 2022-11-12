@@ -27,7 +27,7 @@ public class QuartoView extends FlashSurfaceView {
     private static final float PIECE_WIDTH = 0;
     private static final float PIECE_TALL_HEIGHT = 0;
     private static final float PIECE_SHORT_HEIGHT = 0;
-    private static final float PIECE_SIZE_INCREASE = 0;
+    private static final float PIECE_SIZE_MULT = 200;
     private static final float HBORDER = 0;
     private static final float BOARD_TOP = 0;
     private static final float BOARD_HGAP = 0;
@@ -39,7 +39,6 @@ public class QuartoView extends FlashSurfaceView {
 
     private static final Paint boardCirclePaint = new Paint();
     private static final Paint boardCirclePaintWin = new Paint();
-    private static final Paint poolMarkerPaint = new Paint();
 
     private static final int[] imageIds = {
             R.drawable.dark_square_hollow_short,  // 0000
@@ -75,9 +74,12 @@ public class QuartoView extends FlashSurfaceView {
 
         boardCirclePaint.setColor(0xFF3700B3);
         boardCirclePaintWin.setColor(Color.RED);
-        poolMarkerPaint.setColor(Color.RED);
     }
 
+    /**
+     *
+     * @param state
+     */
     public void setState(QuartoState state) {this.state = state;}
 
     @Override
@@ -86,6 +88,10 @@ public class QuartoView extends FlashSurfaceView {
         drawPool(g);
     }
 
+    /**
+     *
+     * @param g
+     */
     private void drawBoard(Canvas g) {
         for (int i = 0 ; i < 4 ; i++) {
             for (int j = 0 ; j < 4 ; j++) {
@@ -94,57 +100,107 @@ public class QuartoView extends FlashSurfaceView {
         }
     }
 
+    /**
+     *
+     * @param g
+     * @param row
+     * @param col
+     */
     private void drawBoardCircleWithPiece(Canvas g, int row, int col) {
-        // TODO: CODE HERE TO DRAW CIRCLE
-        g.drawOval(row, col, (int) (row + BOARD_WIDTH) - 15, (int) (col + BOARD_WIDTH) - 15, boardCirclePaint);
-        /* draw piece in circle if gamestate is not null and there is a piece in circle */
-        if (state != null && state.getBoard()[row][col] != null) {
-            drawPiece(g, state.getPool()[(row * 8) + col], new Rect());
-        }
+        /* drawing board circle */
+
+
+        /* drawing piece */
+        drawPiece(g,
+                state.getBoard()[row][col],
+                new Rect(
+                        // TODO: rect dimensions for piece on board
+                )
+        );
     }
 
+    /**
+     *
+     * @param g
+     */
     private void drawPool(Canvas g) {
-        drawPoolMarker(g);
-        Piece[] piecePool = state.getPool();
+        /* drawing available pool */
         for (int i = 0 ; i < 2 ; i++) {
             for (int j = 0 ; j < 8 ; j++) {
-                drawPiece(g, piecePool[(i * 8) + j], new Rect());
+                if (state.getToPlace().getPieceId() == i*8 + j) {
+                    drawPiece(g,
+                            state.getToPlace(),
+                            new Rect(
+                                    // TODO: rect dimensions for big piece in pool
+                            )
+                    );
+                }
+                else {
+                    drawPiece(g,
+                            state.getPool()[i*8 + j],
+                            new Rect(
+                                   // TODO: rect dimensions for normal piece in pool
+                            )
+                    );
+                }
             }
         }
     }
 
-    // TODO: Piece is removed from pool so it won't be drawn inside marker; perhaps get piece from toPlace and draw it manually
-    private void drawPoolMarker(Canvas g) {
-        // called in drawPool()
-        // TODO: CREATE NEW RECTANGLE OBJECT (DUMMIED UP)
-        Rect rect = new Rect();
-    }
-
+    /**
+     *
+     *
+     * @param g
+     * @param piece
+     * @param rect
+     */
     private void drawPiece(Canvas g, Piece piece, Rect rect) {
-        // called in drawPool() and drawBoardCircleWithPiece()
-        // iterate through imageId array for game pieces
-        for (int i = 0; i < imageIds.length; i++) {
-            Bitmap image = BitmapFactory.decodeResource(getResources(), imageIds[i]);
+        if (piece != null) {
+            Bitmap image = BitmapFactory.decodeResource(getResources(), imageIds[piece.getPieceId()]);
             g.drawBitmap(image, null, rect, null);
         }
     }
 
     // NOTE: TOUCHTOBOARD AND TOUCHTOSPOT SHOULD BE CALLED DEPENDING ON TYPETURN IN HUMANPLAYER
 
+    // TODO: implement every method below
+
+    /**
+     *
+     * @param x
+     * @param y
+     * @return
+     */
     public Point touchToBoard(int x, int y) {
         return null;
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     * @return
+     */
     public Point touchToPool(int x, int y) {
         return null;
     }
 
+    /**
+     *
+     * @param percent
+     * @return
+     */
     private float h(float percent) {
-        return 0;
+        return screenWidth * percent / 100;
     }
 
+    /**
+     *
+     * @param percent
+     * @return
+     */
     private float v(float percent) {
-        return 0;
+        return screenHeight * percent / 100;
     }
 
 }

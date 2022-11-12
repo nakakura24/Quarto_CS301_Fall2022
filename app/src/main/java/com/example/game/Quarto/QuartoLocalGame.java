@@ -89,6 +89,7 @@ public class QuartoLocalGame extends LocalGame {
     /**
      * Tells if a row has a winning 4-in-a-row.
      *
+     * @param state current game state
      * @param piece last placed piece
      * @param row row to check
      * @return if there is a 4-in-a-row or not.
@@ -118,6 +119,7 @@ public class QuartoLocalGame extends LocalGame {
     /**
      * Tells if a column has a winning 4-in-a-row.
      *
+     * @param state current game state
      * @param piece last placed piece
      * @param col column to check
      * @return if there is a 4-in-a-row or not.
@@ -147,6 +149,7 @@ public class QuartoLocalGame extends LocalGame {
     /**
      * Tells if there is a diagonal 4-in-a-row.
      *
+     * @param state current game state
      * @param piece last placed piece
      * @param row row of last placed piece
      * @param col col of last placed piece
