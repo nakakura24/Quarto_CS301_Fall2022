@@ -1,6 +1,7 @@
 package com.example.game.Quarto.players;
 
 import android.graphics.Color;
+import android.graphics.Point;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -9,6 +10,8 @@ import com.example.game.GameFramework.infoMessage.GameInfo;
 import com.example.game.GameFramework.infoMessage.IllegalMoveInfo;
 import com.example.game.GameFramework.infoMessage.NotYourTurnInfo;
 import com.example.game.GameFramework.players.GameHumanPlayer;
+import com.example.game.Quarto.actions.QuartoPickAction;
+import com.example.game.Quarto.actions.QuartoPlaceAction;
 import com.example.game.Quarto.infoMessage.QuartoState;
 import com.example.game.Quarto.views.QuartoView;
 import com.example.game.R;
@@ -98,7 +101,32 @@ public class QuartoHumanPlayer extends GameHumanPlayer
     @Override
     //TODO: IMPLEMENT SURFACEVIEW INTERACTIONS
     public boolean onTouch(View v, MotionEvent event) {
+        if (event.getAction() != MotionEvent.ACTION_UP) return true;
 
-        return false;
+        QuartoState state = ((QuartoView) v).getState();
+        float x = event.getX();
+        float y = event.getY();
+
+        if (state.getTypeTurn() == QuartoState.TypeTurn.PICK) { // is a picking turn
+            Point p = quartoView.touchToPool(x, y);
+            if (p == null) {
+                quartoView.flash(Color.RED, 50);
+            }
+            else {
+                game.sendAction(new QuartoPickAction(this, p.x*8 + p.y));
+                quartoView.invalidate();
+            }
+        }
+        else { // is a placing turn
+            Point p = quartoView.touchToBoard(x, y);
+            if (p == null) {
+                quartoView.flash(Color.RED, 50);
+            }
+            else {
+                game.sendAction(new QuartoPlaceAction(this, p.x, p.y));
+                quartoView.invalidate();
+            }
+        }
+        return true;
     }
 }

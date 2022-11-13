@@ -85,6 +85,12 @@ public class QuartoView extends FlashSurfaceView {
      */
     public void setState(QuartoState state) {this.state = state;}
 
+    /**
+     *
+     * @return
+     */
+    public QuartoState getState() {return this.state;}
+
     @Override
     public void onDraw(Canvas g) {
         if (state == null) return;
@@ -216,15 +222,13 @@ public class QuartoView extends FlashSurfaceView {
         g.drawBitmap(image, null, rect, null);
     }
 
-    // NOTE: TOUCHTOBOARD AND TOUCHTOSPOT SHOULD BE CALLED DEPENDING ON TYPETURN IN HUMANPLAYER
-
     /**
      *
      * @param x
      * @param y
      * @return
      */
-    public Point touchToBoard(int x, int y) {
+    public Point touchToBoard(float x, float y) {
         for (int i = 0 ; i < 4 ; i++) {
             for (int j = 0 ; j < 4 ; j++) {
                 /* board circle bounds in pixels */
@@ -248,26 +252,18 @@ public class QuartoView extends FlashSurfaceView {
      * @param y
      * @return
      */
-    public Point touchToPool(int x, int y) {
+    public Point touchToPool(float x, float y) {
         for (int i = 0 ; i < 2 ; i++) {
             for (int j = 0 ; j < 8 ; j++) {
                 Piece piece = state.getPool()[i*8 + j]; // piece at current location in pool
 
-                /* if piece at location in pool is available */
-                if (piece != null) {
-                    /* piece bounds in pixels */
-                    float left = h(HBORDER + j * (PIECE_WIDTH + POOL_HGAP));
-                    float top = v( // add by difference in height if short piece
-                            POOL_TOP + i * (PIECE_TALL_HEIGHT + POOL_VGAP) +
-                                    (piece.getHeight() == Piece.Height.SHORT ?
-                                            PIECE_TALL_HEIGHT - PIECE_SHORT_HEIGHT : 0)
-                    );
-                    float right = h(HBORDER + PIECE_WIDTH + j * (PIECE_WIDTH + POOL_HGAP));
-                    float bot = v(POOL_TOP + PIECE_TALL_HEIGHT + i * (PIECE_TALL_HEIGHT + POOL_VGAP));
-
-                    if (x >= left && y >= top && x <= right && y <= bot) {
-                        return new Point(i, j);
-                    }
+                /* piece bounds in pixels */
+                float left = h(HBORDER + j*(PIECE_WIDTH + POOL_HGAP));
+                float top = v(POOL_TOP + i*(PIECE_TALL_HEIGHT + POOL_VGAP));
+                float right = h(HBORDER + PIECE_WIDTH + j*(PIECE_WIDTH + POOL_HGAP));
+                float bot = v(POOL_TOP + PIECE_TALL_HEIGHT + i*(PIECE_TALL_HEIGHT + POOL_VGAP));
+                if (x >= left && y >= top && x <= right && y <= bot) {
+                    return new Point(i, j);
                 }
             }
         }
