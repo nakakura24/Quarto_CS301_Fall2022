@@ -211,7 +211,7 @@ public class QuartoView extends FlashSurfaceView {
      * @param rect
      */
     private void drawPiece(Canvas g, Piece piece, RectF rect) {
-        // TODO: Remove all "new" to improve speed. Make drawPiece() take left, top, right, and bot instead of RectF. Use new param to change bitmap using reconfigure() and getConfig(). Use drawBitmap() that uses left and top instead of RectF.
+        // TODO: Remove all "new" to improve speed.
         Bitmap image = BitmapFactory.decodeResource(getResources(), imageIds[piece.getPieceId()]);
         g.drawBitmap(image, null, rect, null);
     }
@@ -225,7 +225,21 @@ public class QuartoView extends FlashSurfaceView {
      * @return
      */
     public Point touchToBoard(int x, int y) {
-        return null; // TODO: implement touchToBoard()
+        for (int i = 0 ; i < 4 ; i++) {
+            for (int j = 0 ; j < 4 ; j++) {
+                /* board circle bounds in pixels */
+                float left = h(HBORDER + j*(CIRCLE_WIDTH + CIRCLE_HGAP));
+                float top = v(BOARD_TOP + i*(CIRCLE_HEIGHT + CIRCLE_VGAP));
+                float right = h(HBORDER + CIRCLE_WIDTH + j*(CIRCLE_WIDTH + CIRCLE_HGAP));
+                float bot = v(BOARD_TOP + CIRCLE_HEIGHT + i*(CIRCLE_HEIGHT + CIRCLE_VGAP));
+
+                /* if touch was within bounds of a spot */
+                if (x >= left && y >= top && x <= right && y <= bot) {
+                    return new Point(i, j); // return spot touched
+                }
+            }
+        }
+        return null; // return null if not a valid touch
     }
 
     /**
@@ -235,7 +249,29 @@ public class QuartoView extends FlashSurfaceView {
      * @return
      */
     public Point touchToPool(int x, int y) {
-        return null; // TODO: implement touchToPool()
+        for (int i = 0 ; i < 2 ; i++) {
+            for (int j = 0 ; j < 8 ; j++) {
+                Piece piece = state.getPool()[i*8 + j]; // piece at current location in pool
+
+                /* if piece at location in pool is available */
+                if (piece != null) {
+                    /* piece bounds in pixels */
+                    float left = h(HBORDER + j * (PIECE_WIDTH + POOL_HGAP));
+                    float top = v( // add by difference in height if short piece
+                            POOL_TOP + i * (PIECE_TALL_HEIGHT + POOL_VGAP) +
+                                    (piece.getHeight() == Piece.Height.SHORT ?
+                                            PIECE_TALL_HEIGHT - PIECE_SHORT_HEIGHT : 0)
+                    );
+                    float right = h(HBORDER + PIECE_WIDTH + j * (PIECE_WIDTH + POOL_HGAP));
+                    float bot = v(POOL_TOP + PIECE_TALL_HEIGHT + i * (PIECE_TALL_HEIGHT + POOL_VGAP));
+
+                    if (x >= left && y >= top && x <= right && y <= bot) {
+                        return new Point(i, j);
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     /**
