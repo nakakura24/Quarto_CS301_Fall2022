@@ -1,6 +1,7 @@
 package com.example.game.Quarto.players;
 
 import com.example.game.GameFramework.infoMessage.GameInfo;
+import com.example.game.GameFramework.infoMessage.NotYourTurnInfo;
 import com.example.game.GameFramework.players.GameComputerPlayer;
 import com.example.game.Quarto.actions.QuartoPickAction;
 import com.example.game.Quarto.actions.QuartoPlaceAction;
@@ -28,16 +29,19 @@ public class QuartoComputerPlayer extends GameComputerPlayer {
      */
     @Override
     protected void receiveInfo(GameInfo info) {
+        if (info instanceof NotYourTurnInfo) return;
+
         //initialize a copy of the current game state
-        QuartoState qState = new QuartoState((QuartoState) info);
+        if (!(info instanceof QuartoState)) return;
+        QuartoState qState = (QuartoState) info;
+
         //initialize the random generator
         Random randGen = new Random();
 
         //check if it is the human's turn
-        if (qState.getPlayerTurn() != super.playerNum)
-        {
-            return;
-        }
+        if (qState.getPlayerTurn() != this.playerNum) return;
+
+        sleep(1);
 
         //check if the current turn type is a picking turn
         if(qState.getTypeTurn() == QuartoState.TypeTurn.PICK)
@@ -49,8 +53,8 @@ public class QuartoComputerPlayer extends GameComputerPlayer {
             do
             {
                 //generate random index **exclusive of bound
-                poolPiece = randGen.nextInt(qState.getPool().length);
-            } while (qState.getPool()[poolPiece] != null); //check to see if the piece is available
+                poolPiece = randGen.nextInt(16);
+            } while (qState.getPool()[poolPiece] == null); //check to see if the piece is available
 
             super.game.sendAction(new QuartoPickAction(this, poolPiece)); //send a new action to the game
         }
@@ -65,12 +69,11 @@ public class QuartoComputerPlayer extends GameComputerPlayer {
             //available space
             do
             {
-                boardSpaceX = randGen.nextInt(qState.getBoard().length);
-                boardSpaceY = randGen.nextInt(qState.getBoard()[0].length);
+                boardSpaceX = randGen.nextInt(4);
+                boardSpaceY = randGen.nextInt(4);
             } while(qState.getBoard()[boardSpaceX][boardSpaceY] != null); //check to see if the space is available
 
             super.game.sendAction(new QuartoPlaceAction(this, boardSpaceX, boardSpaceY));
-
         }
     }
 }

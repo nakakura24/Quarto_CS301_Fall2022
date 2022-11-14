@@ -72,14 +72,15 @@ public class QuartoLocalGame extends LocalGame {
         int col = state.getLastCol(); // column of location
 
         Piece piece = board[row][col]; // last piece placed
+        if (piece == null) return null;
 
         if (horizontalWin(state, piece, row) ||
                 verticalWin(state, piece, col) ||
                 diagonalWin(state, piece, row, col)) {
-            return playerNames[state.getPlayerTurn()] + " wins!";
+            return playerNames[state.getPlayerTurn()] + " wins! ";
         }
         else if (placeCount >= 16) {
-            return "It's a tie.";
+            return "It's a tie. ";
         }
         else {
             return null;
@@ -106,6 +107,7 @@ public class QuartoLocalGame extends LocalGame {
 
         /* check each characteristic in all columns of the given row */
         for (int col = 0 ; col < 4 ; col++) {
+            if (board[row][col] == null) return false;
             if (piece.getShade() == board[row][col].getShade()) numShade++;
             if (piece.getShape() == board[row][col].getShape()) numShape++;
             if (piece.getFill() == board[row][col].getFill()) numFill++;
@@ -136,6 +138,7 @@ public class QuartoLocalGame extends LocalGame {
 
         /* check each characteristic in all row of the given column */
         for (int row = 0 ; row < 4 ; row++) {
+            if (board[row][col] == null) return false;
             if (piece.getShade() == board[row][col].getShade()) numShade++;
             if (piece.getShape() == board[row][col].getShape()) numShape++;
             if (piece.getFill() == board[row][col].getFill()) numFill++;
@@ -168,6 +171,7 @@ public class QuartoLocalGame extends LocalGame {
         if (row == col) { // possible to have top-left to bot-right diagonal
             /* check each characteristic in all diagonal spots */
             for (int n = 0 ; n < 4 ; n++) {
+                if (board[n][n] == null) return false;
                 if (piece.getShade() == board[n][n].getShade()) numShade++;
                 if (piece.getShape() == board[n][n].getShape()) numShape++;
                 if (piece.getFill() == board[n][n].getFill()) numFill++;
@@ -177,6 +181,7 @@ public class QuartoLocalGame extends LocalGame {
         else if (row == 3-col) { // possible to have top-right to bot-left diagonal
             /* check each characteristic in all diagonal spots */
             for (int n = 0 ; n < 4 ; n++) {
+                if (board[n][3-n] == null) return false;
                 if (piece.getShade() == board[n][3-n].getShade()) numShade++;
                 if (piece.getShape() == board[n][3-n].getShape()) numShape++;
                 if (piece.getFill() == board[n][3-n].getFill()) numFill++;

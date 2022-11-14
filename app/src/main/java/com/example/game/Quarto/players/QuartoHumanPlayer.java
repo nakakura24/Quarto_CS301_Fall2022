@@ -99,7 +99,6 @@ public class QuartoHumanPlayer extends GameHumanPlayer
      * @return True if the listener has consumed the event, false otherwise.
      */
     @Override
-    //TODO: IMPLEMENT SURFACEVIEW INTERACTIONS
     public boolean onTouch(View v, MotionEvent event) {
         if (event.getAction() != MotionEvent.ACTION_UP) return true;
 
