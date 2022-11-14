@@ -1,5 +1,7 @@
 package com.example.game.Quarto.players;
 
+import static java.lang.System.exit;
+
 import android.graphics.Color;
 import android.graphics.Point;
 import android.view.MotionEvent;
@@ -75,6 +77,10 @@ public class QuartoHumanPlayer extends GameHumanPlayer
 
         //set the surfaceView instance variable
         quartoView = (QuartoView)myActivity.findViewById(R.id.quartoView);
+
+        /* set listeners */
+        myActivity.findViewById(R.id.exitGameButton).setOnClickListener(this);
+        myActivity.findViewById(R.id.newGameButton).setOnClickListener(this);
         quartoView.setOnTouchListener(this);
     }
 
@@ -85,8 +91,12 @@ public class QuartoHumanPlayer extends GameHumanPlayer
      */
     @Override
     public void onClick(View v) {
-        //TODO: IMPLEMENT BUTTONS
-
+        if (v.getId() == R.id.exitGameButton) {
+            System.exit(0);
+        }
+        else if (v.getId() == R.id.newGameButton) {
+            myActivity.restartGame();
+        }
     }
 
     /**
@@ -100,30 +110,30 @@ public class QuartoHumanPlayer extends GameHumanPlayer
      */
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        if (event.getAction() != MotionEvent.ACTION_UP) return true;
+        if (event.getAction() != MotionEvent.ACTION_UP) return true; // return if finger not lifted
 
-        QuartoState state = ((QuartoView) v).getState();
-        float x = event.getX();
-        float y = event.getY();
+        QuartoState state = ((QuartoView) v).getState(); // state of game; tell what kind of turn
+
+        float x = event.getX(); // x location
+        float y = event.getY(); // y location
+
+        Point pool = quartoView.touchToPool(x, y); // point for a touch on the pool
+        Point board = quartoView.touchToBoard(x, y); // point for a touch on the board
 
         if (state.getTypeTurn() == QuartoState.TypeTurn.PICK) { // is a picking turn
-            Point pool = quartoView.touchToPool(x, y);
-            Point board = quartoView.touchToBoard(x, y);
-            if (board != null) {
+            if (board != null) { // the board was clicked; flash an error
                 quartoView.flash(Color.RED, 50);
             }
-            else if (pool != null) {
+            else if (pool != null) { // a piece on the pool was clicked
                 game.sendAction(new QuartoPickAction(this, pool.x*8 + pool.y));
                 quartoView.invalidate();
             }
         }
         else { // is a placing turn
-            Point pool = quartoView.touchToPool(x, y);
-            Point board = quartoView.touchToBoard(x, y);
-            if (pool != null) {
+            if (pool != null) { // the pool was clicked; flash an error
                 quartoView.flash(Color.RED, 50);
             }
-            else if (board != null) {
+            else if (board != null) { // a spot on the board was clicked
                 game.sendAction(new QuartoPlaceAction(this, board.x, board.y));
                 quartoView.invalidate();
             }

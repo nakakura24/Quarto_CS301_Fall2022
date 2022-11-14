@@ -1,7 +1,6 @@
 package com.example.game.Quarto;
 
 import java.util.ArrayList;
-
 import com.example.game.GameFramework.GameMainActivity;
 import com.example.game.GameFramework.LocalGame;
 import com.example.game.GameFramework.gameConfiguration.GameConfig;
