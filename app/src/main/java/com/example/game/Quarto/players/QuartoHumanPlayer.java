@@ -107,22 +107,24 @@ public class QuartoHumanPlayer extends GameHumanPlayer
         float y = event.getY();
 
         if (state.getTypeTurn() == QuartoState.TypeTurn.PICK) { // is a picking turn
-            Point p = quartoView.touchToPool(x, y);
-            if (p == null) {
+            Point pool = quartoView.touchToPool(x, y);
+            Point board = quartoView.touchToBoard(x, y);
+            if (board != null) {
                 quartoView.flash(Color.RED, 50);
             }
-            else {
-                game.sendAction(new QuartoPickAction(this, p.x*8 + p.y));
+            else if (pool != null) {
+                game.sendAction(new QuartoPickAction(this, pool.x*8 + pool.y));
                 quartoView.invalidate();
             }
         }
         else { // is a placing turn
-            Point p = quartoView.touchToBoard(x, y);
-            if (p == null) {
+            Point pool = quartoView.touchToPool(x, y);
+            Point board = quartoView.touchToBoard(x, y);
+            if (pool != null) {
                 quartoView.flash(Color.RED, 50);
             }
-            else {
-                game.sendAction(new QuartoPlaceAction(this, p.x, p.y));
+            else if (board != null) {
+                game.sendAction(new QuartoPlaceAction(this, board.x, board.y));
                 quartoView.invalidate();
             }
         }

@@ -26,7 +26,7 @@ public class QuartoView extends FlashSurfaceView {
     private static final float PIECE_WIDTH = 5;
     private static final float PIECE_TALL_HEIGHT = 7.5f;
     private static final float PIECE_SHORT_HEIGHT = 2*PIECE_TALL_HEIGHT/3;
-    private static final float PIECE_SIZE_MULT = 150;
+    private static final float PIECE_SIZE_MULT = 90;
     private static final float HBORDER = 10;
     private static final float BOARD_TOP = 8;
     private static final float CIRCLE_WIDTH = 15;
