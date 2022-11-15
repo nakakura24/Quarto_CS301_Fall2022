@@ -101,6 +101,7 @@ public class QuartoView extends FlashSurfaceView {
         if (state == null) return;
         drawBoard(g);
         drawPool(g);
+        // TODO: announcement text
         // findViewById(R.id.announceText).setText()
     }
 

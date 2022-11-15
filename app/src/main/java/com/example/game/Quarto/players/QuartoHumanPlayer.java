@@ -57,7 +57,7 @@ public class QuartoHumanPlayer extends GameHumanPlayer
         if(info instanceof IllegalMoveInfo || info instanceof NotYourTurnInfo)
         {
             //if the move is out of turn or illegal, flash the screen
-            quartoView.flash(Color.RED, 50);
+            quartoView.flash(Color.RED, 50); // TODO: Why is this not happening?
         }
         else if (!(info instanceof QuartoState)) return;
         else
