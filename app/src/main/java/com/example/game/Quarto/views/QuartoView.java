@@ -21,6 +21,7 @@ public class QuartoView extends FlashSurfaceView {
     protected QuartoState state;
 
     private final float screenWidth, screenHeight;
+    private final RectF[] rects = new RectF[16];
 
     /* sizes and locations (in %) */
     private static final float PIECE_WIDTH = 5;
@@ -72,6 +73,10 @@ public class QuartoView extends FlashSurfaceView {
         screenWidth = getResources().getDisplayMetrics().widthPixels;
         screenHeight = getResources().getDisplayMetrics().heightPixels;
 
+        for (int i = 0 ; i < 16 ; i++) {
+            rects[i] = new RectF();
+        }
+
         boardCirclePaint.setColor(0xFF3700B3);
         boardCirclePaintWin.setColor(Color.RED);
         backgroundPaint.setColor(Color.BLACK);
@@ -96,6 +101,7 @@ public class QuartoView extends FlashSurfaceView {
         if (state == null) return;
         drawBoard(g);
         drawPool(g);
+        // findViewById(R.id.announceText).setText()
     }
 
     /**
@@ -140,7 +146,7 @@ public class QuartoView extends FlashSurfaceView {
             /* piece bounds in pixels */
             left += h((CIRCLE_WIDTH - PIECE_WIDTH) / 2);
             top += v( // subtract by height constant depending if tall or short piece
-                    CIRCLE_HEIGHT -
+                    2*CIRCLE_HEIGHT/3 -
                     (piece.getHeight() == Piece.Height.TALL ?
                             PIECE_TALL_HEIGHT : PIECE_SHORT_HEIGHT)
             );
@@ -148,7 +154,7 @@ public class QuartoView extends FlashSurfaceView {
             bot -= v(CIRCLE_HEIGHT / 3);
 
             /* drawing piece */
-            drawPiece(g, piece, new RectF(left, top, right, bot));
+            drawPiece(g, piece, left, top, right, bot);
         }
     }
 
@@ -176,7 +182,7 @@ public class QuartoView extends FlashSurfaceView {
                     float bot = v(POOL_TOP + PIECE_TALL_HEIGHT + i*(PIECE_TALL_HEIGHT + POOL_VGAP));
 
                     /* drawing piece */
-                    drawPiece(g, piece, new RectF( left, top, right, bot));
+                    drawPiece(g, piece, left, top, right, bot);
                 }
                 /* piece not available but is the piece to be placed */
                 else if (toPlace != null && toPlace.getPieceId() == i*8 + j) {
@@ -203,7 +209,7 @@ public class QuartoView extends FlashSurfaceView {
                     );
 
                     /* drawing piece */
-                    drawPiece(g, toPlace, new RectF(left, top, right, bot));
+                    drawPiece(g, toPlace, left, top, right, bot);
                 }
             }
         }
@@ -211,15 +217,18 @@ public class QuartoView extends FlashSurfaceView {
 
     /**
      *
-     *
      * @param g
      * @param piece
-     * @param rect
+     * @param left
+     * @param top
+     * @param right
+     * @param bot
      */
-    private void drawPiece(Canvas g, Piece piece, RectF rect) {
-        // TODO: Remove all "new" to improve speed.
+    private void drawPiece(Canvas g, Piece piece, float left, float top, float right, float bot) {
+        // TODO: Drawing is still very slow
         Bitmap image = BitmapFactory.decodeResource(getResources(), imageIds[piece.getPieceId()]);
-        g.drawBitmap(image, null, rect, null);
+        rects[piece.getPieceId()].set(left, top, right, bot);
+        g.drawBitmap(image, null, rects[piece.getPieceId()], null);
     }
 
     /**
