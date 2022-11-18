@@ -8,6 +8,10 @@ import org.junit.Test;
 
 public class QuartoStateTest {
 
+    /**
+     * Tests QuartoState.pickPiece()
+     * @author Dylan Price
+     */
     @Test
     public void pickPiece() {
         QuartoState q1 = new QuartoState();
@@ -16,73 +20,97 @@ public class QuartoStateTest {
         assertNull(p);
     }
 
+    /**
+     * Tests QuartoState.placePiece()
+     * @author Dylan Price
+     */
     @Test
     public void placePiece() {
         QuartoState q1 = new QuartoState();
         q1.placePiece(1, 1);
-        assertNotNull(q1.getBoard()[1][1]);
+        assertNull(q1.getToPlace());
     }
 
+    /**
+     * Tests QuartoState.getPool()
+     * @author Dylan Price
+     */
     @Test
     public void getPool() {
         QuartoState q1 = new QuartoState();
-        QuartoState q2 = new QuartoState();
-        Piece[] q1Pool = q1.getPool();
-        Piece[] q2Pool = q2.getPool();
-        assertEquals(q1Pool, q2Pool);
+        for (int i = 0; i < q1.getPool().length; i++) {
+            assertNotNull(q1.getPool()[i]);
+        }
     }
 
+    /**
+     * Tests QuartoState.getBoard()
+     * @author Dylan Price
+     */
     @Test
     public void getBoard() {
         QuartoState q1 = new QuartoState();
-        QuartoState q2 = new QuartoState();
-        Piece[][] q1Board = q1.getBoard();
-        Piece[][] q2Board = q2.getBoard();
-        assertEquals(q1Board, q2Board);
+        for (int i = 0; i < q1.getBoard().length; i++) {
+            for (int j = 0; j < q1.getBoard()[i].length; j++) {
+                assertNull(q1.getBoard()[i][j]);
+            }
+        }
     }
 
+    /**
+     * Tests QuartoState.getPlayerTurn()
+     * @author Dylan Price
+     */
     @Test
     public void getPlayerTurn() {
         QuartoState q1 = new QuartoState();
-        QuartoState q2 = new QuartoState();
-        int q1Turn = q1.getPlayerTurn();
-        int q2Turn = q2.getPlayerTurn();
-        assertEquals(q1Turn, q2Turn);
+        assertNotNull(q1.getPlayerTurn());
     }
 
+    /**
+     * Tests QuartoState.getTypeTurn()
+     * @author Dylan Price
+     */
     @Test
     public void getTypeTurn() {
         QuartoState q1 = new QuartoState();
-        QuartoState q2 = new QuartoState();
-        QuartoState.TypeTurn q1Turn = q1.getTypeTurn();
-        QuartoState.TypeTurn q2Turn = q2.getTypeTurn();
-        assertEquals(q1Turn, q2Turn);
+        QuartoState.TypeTurn turn = q1.getTypeTurn();
+        assertEquals(QuartoState.TypeTurn.PICK, turn);
     }
 
+    /**
+     * Tests QuartoState.getToPlace()
+     * @author Dylan Price
+     */
     @Test
     public void getToPlace() {
         QuartoState q1 = new QuartoState();
-        QuartoState q2 = new QuartoState();
-        Piece q1Place = q1.getToPlace();
-        Piece q2Place = q2.getToPlace();
-        assertEquals(q1Place, q2Place);
+        q1.pickPiece(8);
+        Piece p = q1.getToPlace();
+        assertNotNull(p);
     }
 
+    /**
+     * Tests QuartoState.getLastRow()
+     * @author Dylan Price
+     */
     @Test
     public void getLastRow() {
         QuartoState q1 = new QuartoState();
-        QuartoState q2 = new QuartoState();
-        int q1Row = q1.getLastRow();
-        int q2Row = q2.getLastRow();
-        assertEquals(q1Row, q2Row);
+        q1.pickPiece(8);
+        q1.placePiece(1, 1);
+        assertEquals(1, q1.getLastRow());
     }
 
+    /**
+     * Tests QuartoState.getLastCol()
+     * @author Dylan Price
+     */
     @Test
     public void getLastCol() {
         QuartoState q1 = new QuartoState();
-        QuartoState q2 = new QuartoState();
-        int q1Col = q1.getLastCol();
-        int q2Col = q2.getLastCol();
-        assertEquals(q1Col, q2Col);
+        q1.pickPiece(8);
+        q1.placePiece(1, 1);
+        assertEquals(1, q1.getLastCol());
     }
 }
