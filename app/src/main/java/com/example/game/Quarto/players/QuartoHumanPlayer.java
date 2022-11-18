@@ -110,6 +110,7 @@ public class QuartoHumanPlayer extends GameHumanPlayer
      */
     @Override
     public boolean onTouch(View v, MotionEvent event) {
+        // TODO: Possibly make it so piece characteristics are listed below pool when holding over a piece
         if (event.getAction() != MotionEvent.ACTION_UP) return true; // return if finger not lifted
 
         QuartoState state = ((QuartoView) v).getState(); // state of game; tell what kind of turn

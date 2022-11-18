@@ -16,8 +16,6 @@ import com.example.game.Quarto.objects.Piece;
 import com.example.game.R;
 
 public class QuartoView extends FlashSurfaceView {
-// TODO: AFTER EVERYTHING IS WORKING, TRY MAKE IT SO SPOTS CHANGE COLOR TO MARK 4 IN A ROW
-
     protected QuartoState state;
 
     private final float screenWidth, screenHeight;
@@ -101,7 +99,7 @@ public class QuartoView extends FlashSurfaceView {
         if (state == null) return;
         drawBoard(g);
         drawPool(g);
-        // TODO: announcement text
+        // TODO: announcement text; possibly just draw text instead
         // findViewById(R.id.announceText).setText()
     }
 
@@ -227,6 +225,7 @@ public class QuartoView extends FlashSurfaceView {
      */
     private void drawPiece(Canvas g, Piece piece, float left, float top, float right, float bot) {
         // TODO: Drawing is still very slow
+        // TODO: drawText() the pieceIds to see if bitmap or computations are the problem
         Bitmap image = BitmapFactory.decodeResource(getResources(), imageIds[piece.getPieceId()]);
         rects[piece.getPieceId()].set(left, top, right, bot);
         g.drawBitmap(image, null, rects[piece.getPieceId()], null);
