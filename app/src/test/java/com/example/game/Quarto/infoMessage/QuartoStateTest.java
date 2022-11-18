@@ -11,16 +11,16 @@ public class QuartoStateTest {
     @Test
     public void pickPiece() {
         QuartoState q1 = new QuartoState();
-        Piece[] q1Pool = q1.getPool();
         q1.pickPiece(8);
-        assertEquals(, q1Pool[8]);
+        Piece p = q1.getPool()[8];
+        assertNull(p);
     }
 
     @Test
     public void placePiece() {
         QuartoState q1 = new QuartoState();
-        Piece[] q1Pool = q1.getPool();
-
+        q1.placePiece(1, 1);
+        assertNotNull(q1.getBoard()[1][1]);
     }
 
     @Test
@@ -84,20 +84,5 @@ public class QuartoStateTest {
         int q1Col = q1.getLastCol();
         int q2Col = q2.getLastCol();
         assertEquals(q1Col, q2Col);
-    }
-
-    @Test
-    public String toString() {
-        QuartoState q1 = new QuartoState();
-        QuartoState q2 = new QuartoState();
-        String q1Str = q1.toString();
-        String q2Str = q2.toString();
-        assertEquals(q1Str, q2Str);
-    }
-
-    @Test
-    public boolean equals() {
-        QuartoState q1 = new QuartoState();
-        QuartoState q2 = new QuartoState();
     }
 }
