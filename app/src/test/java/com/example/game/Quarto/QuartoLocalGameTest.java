@@ -1,13 +1,27 @@
-package com.example.game;
+package com.example.game.Quarto;
 
+import static com.example.game.Quarto.QuartoLocalGame.diagonalWin;
+import static com.example.game.Quarto.QuartoLocalGame.horizontalWin;
+import static com.example.game.Quarto.QuartoLocalGame.verticalWin;
 import static org.junit.Assert.*;
 
-import com.example.game.Quarto.QuartoLocalGame;
-import static com.example.game.Quarto.QuartoLocalGame.*;
 import com.example.game.Quarto.infoMessage.QuartoState;
+
 import org.junit.Test;
 
-public class QuartoUnitTests {
+public class QuartoLocalGameTest {
+
+    @Test
+    public void sendUpdatedStateTo() {
+    }
+
+    @Test
+    public void canMove() {
+    }
+
+    @Test
+    public void checkIfGameOver() {
+    }
 
     /**
      * Tests QuartoLocalGame.horizontalWin()
@@ -74,5 +88,9 @@ public class QuartoUnitTests {
         assertTrue(diagonalWin(state, state.getBoard()[3][3], 3, 3));
         assertFalse(diagonalWin(state, state.getBoard()[2][0], 2, 0));
         assertFalse(diagonalWin(state, state.getBoard()[3][0], 3, 0));
+    }
+
+    @Test
+    public void makeMove() {
     }
 }
