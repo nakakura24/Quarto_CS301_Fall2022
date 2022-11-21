@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.widget.TextView;
 
 import com.example.game.GameFramework.utilities.FlashSurfaceView;
 import com.example.game.Quarto.infoMessage.QuartoState;
@@ -16,48 +17,50 @@ import com.example.game.Quarto.objects.Piece;
 import com.example.game.R;
 
 public class QuartoView extends FlashSurfaceView {
-    protected QuartoState state;
+    protected QuartoState state; // current state of the game
 
-    private final float screenWidth, screenHeight;
-    private final RectF[] rects = new RectF[16];
+    private final float screenWidth, screenHeight; // screen dimensions in pixels
+    private static final RectF[] rects = new RectF[16]; // pre-allocated RectF for drawing pieces
+    private static final Bitmap[] images = new Bitmap[16]; // pre-decoded bitmaps for drawing pieces
 
     /* sizes and locations (in %) */
-    private static final float PIECE_WIDTH = 5;
-    private static final float PIECE_TALL_HEIGHT = 7.5f;
-    private static final float PIECE_SHORT_HEIGHT = 2*PIECE_TALL_HEIGHT/3;
-    private static final float PIECE_SIZE_MULT = 90;
-    private static final float HBORDER = 10;
-    private static final float BOARD_TOP = 8;
-    private static final float CIRCLE_WIDTH = 15;
-    private static final float CIRCLE_HEIGHT = 5;
-    private static final float CIRCLE_WEIGHT = 1;
-    private static final float CIRCLE_HGAP = (100-2*HBORDER-4*CIRCLE_WIDTH)/3;
-    private static final float CIRCLE_VGAP = 8;
-    private static final float POOL_TOP = 67.5f;
-    private static final float POOL_HGAP = (100-2*HBORDER-8*PIECE_WIDTH)/7;
-    private static final float POOL_VGAP = 5;
+    private static final float PIECE_WIDTH = 5; // width of piece
+    private static final float PIECE_TALL_HEIGHT = 7.5f; // height of tall piece
+    private static final float PIECE_SHORT_HEIGHT = 2*PIECE_TALL_HEIGHT/3; // height of short piece
+    private static final float PIECE_SIZE_INC = 90; // amount that a selected piece grows
+    private static final float HBORDER = 10; // distance of left side of screen to board and pool
+    private static final float BOARD_TOP = 8; // distance of top side of screen to board
+    private static final float CIRCLE_WIDTH = 15; // width of board circle
+    private static final float CIRCLE_HEIGHT = 5; // height of board circle
+    private static final float CIRCLE_WEIGHT = 1; // line thickness of board circle
+    private static final float CIRCLE_HGAP = (100-2*HBORDER-4*CIRCLE_WIDTH)/3; // horizontal distance between board circles
+    private static final float CIRCLE_VGAP = 8; // vertical distance between board circles
+    private static final float POOL_TOP = 67.5f; // distance of top of screen to pool
+    private static final float POOL_HGAP = (100-2*HBORDER-8*PIECE_WIDTH)/7; // horizontal distance between pool pieces
+    private static final float POOL_VGAP = 5; // vertical distance between pool pieces
 
+    /* paints */
     private static final Paint boardCirclePaint = new Paint();
-    private static final Paint boardCirclePaintWin = new Paint();
     private static final Paint backgroundPaint = new Paint();
 
+    /* array of image ids indexed by piece id */
     private static final int[] imageIds = {
-            R.drawable.dark_square_hollow_short,  // 0000
-            R.drawable.dark_square_hollow_tall,   // 0001
-            R.drawable.dark_square_solid_short,   // 0010
-            R.drawable.dark_square_solid_tall,    // 0011
-            R.drawable.dark_circle_hollow_short,  // 0100
-            R.drawable.dark_circle_hollow_tall,   // 0101
-            R.drawable.dark_circle_solid_short,   // 0110
-            R.drawable.dark_circle_solid_tall,    // 0111
-            R.drawable.light_square_hollow_short, // 1000
-            R.drawable.light_square_hollow_tall,  // 1001
-            R.drawable.light_square_solid_short,  // 1010
-            R.drawable.light_square_solid_tall,   // 1011
-            R.drawable.light_circle_hollow_short, // 1100
-            R.drawable.light_circle_hollow_tall,  // 1101
-            R.drawable.light_circle_solid_short,  // 1110
-            R.drawable.light_circle_solid_tall    // 1111
+            R.drawable.dark_square_hollow_short,  // 0000: 0
+            R.drawable.dark_square_hollow_tall,   // 0001: 1
+            R.drawable.dark_square_solid_short,   // 0010: 2
+            R.drawable.dark_square_solid_tall,    // 0011: 3
+            R.drawable.dark_circle_hollow_short,  // 0100: 4
+            R.drawable.dark_circle_hollow_tall,   // 0101: 5
+            R.drawable.dark_circle_solid_short,   // 0110: 6
+            R.drawable.dark_circle_solid_tall,    // 0111: 7
+            R.drawable.light_square_hollow_short, // 1000: 8
+            R.drawable.light_square_hollow_tall,  // 1001: 9
+            R.drawable.light_square_solid_short,  // 1010: 10
+            R.drawable.light_square_solid_tall,   // 1011: 11
+            R.drawable.light_circle_hollow_short, // 1100: 12
+            R.drawable.light_circle_hollow_tall,  // 1101: 13
+            R.drawable.light_circle_solid_short,  // 1110: 14
+            R.drawable.light_circle_solid_tall    // 1111: 15
     };
 
     /**
@@ -71,12 +74,15 @@ public class QuartoView extends FlashSurfaceView {
         screenWidth = getResources().getDisplayMetrics().widthPixels;
         screenHeight = getResources().getDisplayMetrics().heightPixels;
 
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 4; // decrease image size by factor of 4
+
         for (int i = 0 ; i < 16 ; i++) {
             rects[i] = new RectF();
+            images[i] = BitmapFactory.decodeResource(getResources(), imageIds[i], options);
         }
 
         boardCirclePaint.setColor(0xFF3700B3);
-        boardCirclePaintWin.setColor(Color.RED);
         backgroundPaint.setColor(Color.BLACK);
 
         setBackgroundColor(backgroundPaint.getColor());
@@ -99,8 +105,7 @@ public class QuartoView extends FlashSurfaceView {
         if (state == null) return;
         drawBoard(g);
         drawPool(g);
-        // TODO: announcement text; possibly just draw text instead
-        // findViewById(R.id.announceText).setText()
+        // TODO: maybe just draw text; or figure out how to set button
     }
 
     /**
@@ -162,7 +167,7 @@ public class QuartoView extends FlashSurfaceView {
      * @param g
      */
     private void drawPool(Canvas g) {
-        Piece toPlace = state.getToPlace(); // piece to selected to be placed
+        Piece toPlace = state.getToPlace(); // piece selected to be placed
 
         for (int i = 0 ; i < 2 ; i++) {
             for (int j = 0 ; j < 8 ; j++) {
@@ -188,22 +193,22 @@ public class QuartoView extends FlashSurfaceView {
                     /* piece bounds in pixels */
                     float left = h(
                             HBORDER + j*(PIECE_WIDTH + POOL_HGAP) -
-                            (PIECE_SIZE_MULT/100) * (PIECE_WIDTH/2)
+                            (PIECE_SIZE_INC/100) * (PIECE_WIDTH/2)
                     );
                     float top = v( // size change for top must be according to piece height
                             POOL_TOP + i*(PIECE_TALL_HEIGHT + POOL_VGAP) +
                             (toPlace.getHeight() == Piece.Height.SHORT ?
                                     PIECE_TALL_HEIGHT-PIECE_SHORT_HEIGHT : 0) -
-                            (PIECE_SIZE_MULT/100) * ((toPlace.getHeight() == Piece.Height.TALL ?
+                            (PIECE_SIZE_INC/100) * ((toPlace.getHeight() == Piece.Height.TALL ?
                                     PIECE_TALL_HEIGHT : PIECE_SHORT_HEIGHT)/2)
                     );
                     float right = h(
                             HBORDER + PIECE_WIDTH + j*(PIECE_WIDTH + POOL_HGAP) +
-                            (PIECE_SIZE_MULT/100) * (PIECE_WIDTH/2)
+                            (PIECE_SIZE_INC/100) * (PIECE_WIDTH/2)
                     );
                     float bot = v( // size change for bot must also be according to piece height
                             POOL_TOP + PIECE_TALL_HEIGHT + i*(PIECE_TALL_HEIGHT + POOL_VGAP) +
-                            (PIECE_SIZE_MULT/100) * ((toPlace.getHeight() == Piece.Height.TALL ?
+                            (PIECE_SIZE_INC/100) * ((toPlace.getHeight() == Piece.Height.TALL ?
                                     PIECE_TALL_HEIGHT : PIECE_SHORT_HEIGHT)/2)
                     );
 
@@ -224,11 +229,8 @@ public class QuartoView extends FlashSurfaceView {
      * @param bot
      */
     private void drawPiece(Canvas g, Piece piece, float left, float top, float right, float bot) {
-        // TODO: Drawing is still very slow
-        // TODO: drawText() the pieceIds to see if bitmap or computations are the problem
-        Bitmap image = BitmapFactory.decodeResource(getResources(), imageIds[piece.getPieceId()]);
         rects[piece.getPieceId()].set(left, top, right, bot);
-        g.drawBitmap(image, null, rects[piece.getPieceId()], null);
+        g.drawBitmap(images[piece.getPieceId()], null, rects[piece.getPieceId()], null);
     }
 
     /**
