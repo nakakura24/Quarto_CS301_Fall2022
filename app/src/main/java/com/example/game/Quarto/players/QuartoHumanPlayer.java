@@ -18,6 +18,8 @@ import com.example.game.Quarto.infoMessage.QuartoState;
 import com.example.game.Quarto.views.QuartoView;
 import com.example.game.R;
 
+import org.w3c.dom.Text;
+
 public class QuartoHumanPlayer extends GameHumanPlayer
         implements View.OnTouchListener, View.OnClickListener {
 
@@ -32,6 +34,14 @@ public class QuartoHumanPlayer extends GameHumanPlayer
     public QuartoHumanPlayer(String name, int layoutId) {
         super(name);
         this.layoutId = layoutId;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String[] getPlayerNames() {
+        return allPlayerNames;
     }
 
     /**
@@ -57,7 +67,7 @@ public class QuartoHumanPlayer extends GameHumanPlayer
         if(info instanceof IllegalMoveInfo || info instanceof NotYourTurnInfo)
         {
             //if the move is out of turn or illegal, flash the screen
-            quartoView.flash(Color.RED, 50); // TODO: Why is this not happening?
+            quartoView.flash(Color.RED, 50);
         }
         else if (!(info instanceof QuartoState)) return;
         else
@@ -75,8 +85,17 @@ public class QuartoHumanPlayer extends GameHumanPlayer
         //load the layout resource for the new configuration
         activity.setContentView(layoutId);
 
-        //set the surfaceView instance variable
-        quartoView = (QuartoView)myActivity.findViewById(R.id.quartoView);
+        // set the surfaceView instance variable
+        quartoView = myActivity.findViewById(R.id.quartoView);
+
+        /* set TextViews */
+        quartoView.setTextViews(
+                myActivity.findViewById(R.id.announceText),
+                myActivity.findViewById(R.id.pieceText)
+        );
+
+        /* set player for view */
+        quartoView.setPlayer(this);
 
         /* set listeners */
         myActivity.findViewById(R.id.exitGameButton).setOnClickListener(this);
@@ -110,7 +129,6 @@ public class QuartoHumanPlayer extends GameHumanPlayer
      */
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        // TODO: Possibly make it so piece characteristics are listed below pool when holding over a piece
         if (event.getAction() != MotionEvent.ACTION_UP) return true; // return if finger not lifted
 
         QuartoState state = ((QuartoView) v).getState(); // state of game; tell what kind of turn

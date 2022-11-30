@@ -14,10 +14,16 @@ import android.widget.TextView;
 import com.example.game.GameFramework.utilities.FlashSurfaceView;
 import com.example.game.Quarto.infoMessage.QuartoState;
 import com.example.game.Quarto.objects.Piece;
+import com.example.game.Quarto.players.QuartoHumanPlayer;
 import com.example.game.R;
 
 public class QuartoView extends FlashSurfaceView {
     protected QuartoState state; // current state of the game
+
+    private TextView announceText;
+    private TextView pieceText;
+
+    private QuartoHumanPlayer player;
 
     private final float screenWidth, screenHeight; // screen dimensions in pixels
     private static final RectF[] rects = new RectF[16]; // pre-allocated RectF for drawing pieces
@@ -88,6 +94,15 @@ public class QuartoView extends FlashSurfaceView {
         setBackgroundColor(backgroundPaint.getColor());
     }
 
+    public void setTextViews(TextView announceText, TextView pieceText) {
+        this.announceText = announceText;
+        this.pieceText = pieceText;
+    }
+
+    public void setPlayer(QuartoHumanPlayer player) {
+        this.player = player;
+    }
+
     /**
      *
      * @param state
@@ -105,7 +120,8 @@ public class QuartoView extends FlashSurfaceView {
         if (state == null) return;
         drawBoard(g);
         drawPool(g);
-        // TODO: maybe just draw text; or figure out how to set button
+        setAnnounceText();
+        setPieceText();
     }
 
     /**
@@ -231,6 +247,40 @@ public class QuartoView extends FlashSurfaceView {
     private void drawPiece(Canvas g, Piece piece, float left, float top, float right, float bot) {
         rects[piece.getPieceId()].set(left, top, right, bot);
         g.drawBitmap(images[piece.getPieceId()], null, rects[piece.getPieceId()], null);
+    }
+
+    /**
+     *
+     */
+    private void setAnnounceText() {
+        String[] playerNames = player.getPlayerNames();
+        if (playerNames == null) return;
+
+        QuartoState.TypeTurn typeTurn = state.getTypeTurn();
+        int playerTurn = state.getPlayerTurn();
+        int oppTurn = (playerTurn == 1) ? 0:1;
+
+        announceText.setText(playerNames[playerTurn] + ", ");
+        if (typeTurn == QuartoState.TypeTurn.PICK) {
+            announceText.append("pick a piece for " + playerNames[oppTurn] + ".");
+        }
+        else {
+            announceText.append("place the piece.");
+        }
+    }
+
+    /**
+     *
+     */
+    private void setPieceText() {
+        Piece toPlace = state.getToPlace();
+        if (toPlace == null) pieceText.setText("");
+        else {
+            pieceText.setText(toPlace.getShade() == Piece.Shade.LIGHT? "Light | " : "Dark | ");
+            pieceText.append(toPlace.getShape() == Piece.Shape.CIRCLE? "Circle | " : "Square | ");
+            pieceText.append(toPlace.getFill() == Piece.Fill.SOLID? "Solid | " : "Hollow | ");
+            pieceText.append(toPlace.getHeight() == Piece.Height.TALL? "Tall" : "Short");
+        }
     }
 
     /**

@@ -41,7 +41,7 @@ public class QuartoComputerPlayer extends GameComputerPlayer {
         //check if it is the human's turn
         if (qState.getPlayerTurn() != this.playerNum) return;
 
-        sleep(1);
+        sleep(2);
 
         //check if the current turn type is a picking turn
         if(qState.getTypeTurn() == QuartoState.TypeTurn.PICK)
