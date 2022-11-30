@@ -33,6 +33,7 @@ public class QuartoComputerPlayer extends GameComputerPlayer {
 
         //initialize a copy of the current game state
         if (!(info instanceof QuartoState)) return;
+
         QuartoState qState = (QuartoState) info;
 
         //initialize the random generator
