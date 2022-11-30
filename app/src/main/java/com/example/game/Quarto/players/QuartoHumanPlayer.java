@@ -1,7 +1,5 @@
 package com.example.game.Quarto.players;
 
-import static java.lang.System.exit;
-
 import android.graphics.Color;
 import android.graphics.Point;
 import android.view.MotionEvent;

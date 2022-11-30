@@ -1,5 +1,7 @@
 package com.example.game.Quarto;
 
+import android.content.pm.ActivityInfo;
+
 import java.util.ArrayList;
 import com.example.game.GameFramework.GameMainActivity;
 import com.example.game.GameFramework.LocalGame;
@@ -22,6 +24,7 @@ public class QuartoMainActivity extends GameMainActivity {
     public GameConfig createDefaultConfig() {
         // define player types for quarto
         ArrayList<GamePlayerType> playerTypes = new ArrayList<>();
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         // two player types allowed (human and computer)
         // add human player type to the list
