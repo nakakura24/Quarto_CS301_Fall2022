@@ -53,6 +53,9 @@ public class QuartoMainActivity extends GameMainActivity {
         // add a computer player to the config and set it as player 2
         config.addPlayer("Computer",1);
 
+        //add a smart computer player to the config and set it as player 2
+        config.addPlayer("Smart Computer", 1);
+
         config.setRemoteData("Remote Human Player", "", 0);
         return config;
     }

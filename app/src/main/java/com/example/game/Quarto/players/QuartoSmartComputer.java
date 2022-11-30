@@ -5,6 +5,7 @@ import android.graphics.Point;
 
 
 import com.example.game.GameFramework.infoMessage.GameInfo;
+import com.example.game.GameFramework.infoMessage.NotYourTurnInfo;
 import com.example.game.Quarto.QuartoLocalGame;
 import com.example.game.Quarto.actions.QuartoPickAction;
 import com.example.game.Quarto.actions.QuartoPlaceAction;
@@ -32,66 +33,76 @@ public class QuartoSmartComputer extends QuartoComputerPlayer {
      */
     @Override
     protected void receiveInfo(GameInfo info) {
+
+        if (info instanceof NotYourTurnInfo) return;
+
+        if (!(info instanceof QuartoState)) return;
+
         //initialize a copy of the current game state
         QuartoState qState = new QuartoState((QuartoState) info);
 
         //temp variables
-        ArrayList<Piece> losingPieces = pickCheck(info);
-        ArrayList<Point> winSpaces = placeCheck(info);
         Piece tempPiece;
         Random randGen = new Random();
         int boardSpaceX;
         int boardSpaceY;
 
         //check if it is the human's turn
-        if (qState.getPlayerTurn() != super.playerNum) return;
+        if (qState.getPlayerTurn() != this.playerNum) return;
+
+        sleep(1);
 
         //check if the current turn type is a picking turn
-        if(qState.getTypeTurn() == QuartoState.TypeTurn.PICK)
-        {
+        if(qState.getTypeTurn() == QuartoState.TypeTurn.PICK) {
+            //retrieve losing pieces from the pool
+            ArrayList<Piece> losingPieces = pickCheck(qState);
+            //initialize valid pieces to select from
+            ArrayList<Piece> validPieces = new ArrayList<>();
             /* compare the current pool to the losing pieces found */
-
-            for(int i = 0; i < qState.getPool().length; i++)
-            {
+            for (int i = 0; i < qState.getPool().length; i++) {
                 //grab a piece from the pool
                 tempPiece = qState.getPool()[i];
                 //check whether that piece is playable
-                if(tempPiece == null) {continue;}
+                if (tempPiece == null) continue;
 
-                for(int j = 0; j < losingPieces.size(); j++)
-                {
-                    //check if the current piece in the pool is a losing piece or whether
-                    //there are no losing pieces
-                    if(tempPiece.equals(losingPieces.get(j)) || losingPieces.get(j) == null) /* ??? */
-                    {
-                        continue; //changed from break;
+                boolean willLose = false;
+                for (int j = 0; j < losingPieces.size(); j++) {
+                    //check if the current piece in the pool is a losing piece
+                    if (tempPiece.equals(losingPieces.get(j))) /* ??? */ {
+                        willLose = true;
                     }
-                    //if it is not a losing piece pick the piece
-                    super.game.sendAction(new QuartoPickAction(this, tempPiece.getPieceId()));
-                    return;
                 }
-
-                // if the for loop is fully iterated then all pieces are losing pieces or there are none
-                // so pick a random piece
-
+                //if the piece is not a losing piece add it to valid pieces
+                if(!willLose)
+                {
+                    validPieces.add(tempPiece);
+                }
+            }
+            //if valid pieces is not empty randomly select a piece to pick
+            if (!validPieces.isEmpty())
+            {
+                int temp = randGen.nextInt(validPieces.size());
+                super.game.sendAction(new QuartoPickAction(this, validPieces.get(temp).getPieceId()));
+                return;
+            }
+            // if valid pieces is empty then all pieces are losing pieces or there are none
+            // so pick a random piece
+            else {
                 int poolPiece; //placeHolder
 
                 //generate a random index in the pool array and check to see if it is an
                 //available piece
-                do
-                {
+                do {
                     //generate random index **exclusive of bound
                     poolPiece = randGen.nextInt(qState.getPool().length);
-                } while (qState.getPool()[poolPiece] != null); //check to see if the piece is available
-
+                } while (qState.getPool()[poolPiece] == null); //check to see if the piece is available
                 super.game.sendAction(new QuartoPickAction(this, poolPiece)); //send a new action to the game
-                return;
             }
-
         }
         //if it is not a picking turn, it is a placing turn
         else
         {
+            ArrayList<NewPoint> winSpaces = placeCheck(qState);
             //place a piece that will win the computer the game
             for(int i = 0; i < winSpaces.size(); i++)
             {
@@ -111,7 +122,7 @@ public class QuartoSmartComputer extends QuartoComputerPlayer {
             } while(qState.getBoard()[boardSpaceX][boardSpaceY] != null); //check to see if the space is available
 
             super.game.sendAction(new QuartoPlaceAction(this, boardSpaceX, boardSpaceY));
-            return;
+
 
         }
         /* Anomalies or possible problems */
@@ -138,11 +149,12 @@ public class QuartoSmartComputer extends QuartoComputerPlayer {
         //initialize the current state of the game
         QuartoState qState = new QuartoState((QuartoState) info);
         //copy the qState
-        QuartoState copyState = new QuartoState(qState);
+        QuartoState copyState;
         //initialize the return ArrayList of losing pieces
         ArrayList<Piece> losingPieces = new ArrayList<>();
 
         //iterate through the current pool of available pieces
+        NextPiece:
         for (int i = 0; i < qState.getPool().length; i++) {
 
             Piece tempPiece = qState.getPool()[i]; //grab each piece from the current pool
@@ -156,6 +168,9 @@ public class QuartoSmartComputer extends QuartoComputerPlayer {
 
                 for (int col = 0; col < qState.getBoard()[row].length; col++)
                 {
+                    //refresh the current state
+                    copyState = new QuartoState(qState);
+
                     //look for an empty spot on the game board
                     if (qState.getBoard()[row][col] == null)
                     {
@@ -169,6 +184,7 @@ public class QuartoSmartComputer extends QuartoComputerPlayer {
                          || QuartoLocalGame.verticalWin(copyState, tempPiece, col))
                         {
                             losingPieces.add(tempPiece); //add the losing piece
+                            continue NextPiece;// continue to the next piece
                         }
                     }
                 }
@@ -192,15 +208,14 @@ public class QuartoSmartComputer extends QuartoComputerPlayer {
      *
      **/
 
-    public ArrayList<Point> placeCheck(GameInfo info)
+    public ArrayList<NewPoint> placeCheck(GameInfo info)
     {
-        Point p0 = new Point();
         //initialize the current state of the game
         QuartoState qState = new QuartoState((QuartoState) info);
         //copy the qState
         QuartoState copyState = new QuartoState(qState);
         //initialize the return ArrayList of winning points
-        ArrayList<Point> winSpaces = new ArrayList<>();
+        ArrayList<NewPoint> winSpaces = new ArrayList<>();
         //grab the place to piece from the Quarto State
         Piece toPlace = qState.getToPlace();
 
@@ -209,6 +224,8 @@ public class QuartoSmartComputer extends QuartoComputerPlayer {
         {
             for(int col = 0; col < qState.getBoard()[row].length; col++)
             {
+                //refresh copy state
+                copyState = new QuartoState(qState);
                 //look for an empty space on the game board
                if(qState.getBoard()[row][col] == null) {
                    //place the piece on the board
@@ -219,7 +236,7 @@ public class QuartoSmartComputer extends QuartoComputerPlayer {
                     || QuartoLocalGame.horizontalWin(copyState, toPlace, row)
                     || QuartoLocalGame.verticalWin(copyState, toPlace, col))
                    {
-                       winSpaces.add(new Point(row, col)); //add the winning space
+                       winSpaces.add(new NewPoint(row, col)); //add the winning space
                    }
                }
             }

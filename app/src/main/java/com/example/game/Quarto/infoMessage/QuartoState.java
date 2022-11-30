@@ -183,6 +183,7 @@ public class QuartoState extends GameState {
         return false;
     }
 
+    public void setPlace(Piece toPlace) {this.toPlace = toPlace;}
     /** FOR TESTING **/
 
     public void setPlayerTurn(int num)
