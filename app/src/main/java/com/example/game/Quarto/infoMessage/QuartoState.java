@@ -182,4 +182,17 @@ public class QuartoState extends GameState {
     public boolean equals(Object object) {
         return false;
     }
+
+    /** FOR TESTING **/
+
+    public void setPlayerTurn(int num)
+    {
+        this.playerTurn = num;
+    }
+
+    public void setToPlace(Piece toPlace)
+    {
+        this.toPlace = toPlace;
+        this.pool[toPlace.getPieceId()] = null;
+    }
 }

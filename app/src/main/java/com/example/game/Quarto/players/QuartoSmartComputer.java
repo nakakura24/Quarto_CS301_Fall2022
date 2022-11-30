@@ -2,6 +2,8 @@ package com.example.game.Quarto.players;
 
 import android.graphics.Point;
 
+
+
 import com.example.game.GameFramework.infoMessage.GameInfo;
 import com.example.game.Quarto.QuartoLocalGame;
 import com.example.game.Quarto.actions.QuartoPickAction;
@@ -62,7 +64,7 @@ public class QuartoSmartComputer extends QuartoComputerPlayer {
                     //there are no losing pieces
                     if(tempPiece.equals(losingPieces.get(j)) || losingPieces.get(j) == null) /* ??? */
                     {
-                        break;
+                        continue; //changed from break;
                     }
                     //if it is not a losing piece pick the piece
                     super.game.sendAction(new QuartoPickAction(this, tempPiece.getPieceId()));
@@ -128,10 +130,15 @@ public class QuartoSmartComputer extends QuartoComputerPlayer {
      *
      * @param info the object representing the information from the game
      * @return returns an ArrayList of pieces that the computer cannot pick (because the human would win)
+     *
+     * SET TO PUBLIC FOR TESTING
+     *
      */
-    private ArrayList<Piece> pickCheck(GameInfo info) {
+    public ArrayList<Piece> pickCheck(GameInfo info) {
         //initialize the current state of the game
         QuartoState qState = new QuartoState((QuartoState) info);
+        //copy the qState
+        QuartoState copyState = new QuartoState(qState);
         //initialize the return ArrayList of losing pieces
         ArrayList<Piece> losingPieces = new ArrayList<>();
 
@@ -152,10 +159,14 @@ public class QuartoSmartComputer extends QuartoComputerPlayer {
                     //look for an empty spot on the game board
                     if (qState.getBoard()[row][col] == null)
                     {
+                        //place the piece on the board
+                        copyState.pickPiece(tempPiece.getPieceId());
+                        copyState.placePiece(row, col);
+
                         //test whether the piece from the pool will win the game at this spot
-                        if (QuartoLocalGame.diagonalWin(qState, tempPiece, row, col)
-                         || QuartoLocalGame.horizontalWin(qState, tempPiece, row)
-                         || QuartoLocalGame.verticalWin(qState, tempPiece, col))
+                        if (QuartoLocalGame.diagonalWin(copyState, tempPiece, row, col)
+                         || QuartoLocalGame.horizontalWin(copyState, tempPiece, row)
+                         || QuartoLocalGame.verticalWin(copyState, tempPiece, col))
                         {
                             losingPieces.add(tempPiece); //add the losing piece
                         }
@@ -176,29 +187,37 @@ public class QuartoSmartComputer extends QuartoComputerPlayer {
      *
      * @param info the object representing the information from the game
      * @return returns an ArrayList of spaces that will cause the computer to win if a given piece is placed there
-     */
+     *
+     * SET TO PUBLIC FOR TESTING
+     *
+     **/
 
-    private ArrayList<Point> placeCheck(GameInfo info)
+    public ArrayList<Point> placeCheck(GameInfo info)
     {
+        Point p0 = new Point();
         //initialize the current state of the game
         QuartoState qState = new QuartoState((QuartoState) info);
+        //copy the qState
+        QuartoState copyState = new QuartoState(qState);
         //initialize the return ArrayList of winning points
-        ArrayList<Point> winSpaces= new ArrayList<>();
+        ArrayList<Point> winSpaces = new ArrayList<>();
         //grab the place to piece from the Quarto State
         Piece toPlace = qState.getToPlace();
 
         //iterate through the board
         for(int row = 0; row < qState.getBoard().length; row++)
         {
-
             for(int col = 0; col < qState.getBoard()[row].length; col++)
             {
                 //look for an empty space on the game board
                if(qState.getBoard()[row][col] == null) {
+                   //place the piece on the board
+                   copyState.placePiece(row, col);
+
                    //test whether placing the piece at this spot will win the game
-                   if (QuartoLocalGame.diagonalWin(qState, toPlace, row, col)
-                    || QuartoLocalGame.horizontalWin(qState, toPlace, row)
-                    || QuartoLocalGame.verticalWin(qState, toPlace, col))
+                   if (QuartoLocalGame.diagonalWin(copyState, toPlace, row, col)
+                    || QuartoLocalGame.horizontalWin(copyState, toPlace, row)
+                    || QuartoLocalGame.verticalWin(copyState, toPlace, col))
                    {
                        winSpaces.add(new Point(row, col)); //add the winning space
                    }
