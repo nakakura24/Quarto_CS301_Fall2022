@@ -9,9 +9,14 @@ import com.example.game.Quarto.infoMessage.QuartoState;
 
 import java.util.Random;
 
+/**
+ * Dumb AI player for a game of Quarto.
+ *
+ * @author Alexander Leonor
+ * @author Cameron Nakakura
+ * @author Dylan Price
+ */
 public class QuartoComputerPlayer extends GameComputerPlayer {
-
-
     /**
      * constructor
      *

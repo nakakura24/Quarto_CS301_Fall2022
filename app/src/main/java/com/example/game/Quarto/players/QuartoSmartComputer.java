@@ -1,8 +1,5 @@
 package com.example.game.Quarto.players;
 
-import android.graphics.Point;
-
-
 
 import com.example.game.GameFramework.infoMessage.GameInfo;
 import com.example.game.GameFramework.infoMessage.NotYourTurnInfo;
@@ -10,11 +7,19 @@ import com.example.game.Quarto.QuartoLocalGame;
 import com.example.game.Quarto.actions.QuartoPickAction;
 import com.example.game.Quarto.actions.QuartoPlaceAction;
 import com.example.game.Quarto.infoMessage.QuartoState;
+import com.example.game.Quarto.misc.NewPoint;
 import com.example.game.Quarto.objects.Piece;
 
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * Smart AI player for a game of Quarto.
+ *
+ * @author Alexander Leonor
+ * @author Cameron Nakakura
+ * @author Dylan Price
+ */
 public class QuartoSmartComputer extends QuartoComputerPlayer {
     /**
      * constructor
@@ -50,7 +55,7 @@ public class QuartoSmartComputer extends QuartoComputerPlayer {
         //check if it is the human's turn
         if (qState.getPlayerTurn() != this.playerNum) return;
 
-        sleep(1);
+        sleep(2);
 
         //check if the current turn type is a picking turn
         if(qState.getTypeTurn() == QuartoState.TypeTurn.PICK) {

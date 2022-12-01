@@ -8,6 +8,13 @@ import com.example.game.Quarto.actions.QuartoPlaceAction;
 import com.example.game.Quarto.infoMessage.QuartoState;
 import com.example.game.Quarto.objects.Piece;
 
+/**
+ * Local game of Quarto.
+ *
+ * @author Alexander Leonor
+ * @author Cameron Nakakura
+ * @author Dylan Price
+ */
 public class QuartoLocalGame extends LocalGame {
     private int placeCount = 0; // counts how many pieces have been placed; used for gameover check
 

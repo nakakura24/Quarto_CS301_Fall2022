@@ -18,11 +18,18 @@ import com.example.game.R;
 
 import org.w3c.dom.Text;
 
+/**
+ * Human player for a game of Quarto.
+ *
+ * @author Alexander Leonor
+ * @author Cameron Nakakura
+ * @author Dylan Price
+ */
 public class QuartoHumanPlayer extends GameHumanPlayer
         implements View.OnTouchListener, View.OnClickListener {
 
-    private QuartoView quartoView;
-    private int layoutId;
+    private QuartoView quartoView; // gui for the human to see
+    private int layoutId; // layout id of the layout that the human sees
 
     /**
      * constructor
@@ -35,8 +42,9 @@ public class QuartoHumanPlayer extends GameHumanPlayer
     }
 
     /**
+     * Gets the player names.
      *
-     * @return
+     * @return a list of the names of all players in the game
      */
     public String[] getPlayerNames() {
         return allPlayerNames;

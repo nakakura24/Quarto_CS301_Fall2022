@@ -2,32 +2,28 @@ package com.example.game.Quarto.players;
 
 import static org.junit.Assert.*;
 
-import android.graphics.Point;
-
-import com.example.game.GameFramework.infoMessage.GameInfo;
-import com.example.game.Quarto.QuartoLocalGame;
 import com.example.game.Quarto.infoMessage.QuartoState;
+import com.example.game.Quarto.misc.NewPoint;
 import com.example.game.Quarto.objects.Piece;
 
-import org.checkerframework.checker.units.qual.A;
 import org.junit.Test;
 
 import java.util.ArrayList;
 
-/*
-    AUTHOR: Alexander Leonor
- */
-
 public class QuartoSmartComputerTest {
 
+    /**
+     * Tests QuartoSmartComputer.pickCheck().
+     * @author Alexander Leonor
+     */
     @Test
     public void testPickCheck() {
 
-        /** Initialize Test State and Smart Computer */
+        /* Initialize Test State and Smart Computer */
         QuartoState test1 = new QuartoState();
         QuartoSmartComputer smart = new QuartoSmartComputer("test");
 
-        /** Test Horizontal Win Condition */
+        /* Test Horizontal Win Condition */
 
         //set up a horizontal win condition
         test1.setToPlace(test1.getPool()[0]);
@@ -69,7 +65,7 @@ public class QuartoSmartComputerTest {
         }
         assertTrue(isSame);
 
-        /** Test Diagonal Win Condition */
+        /* Test Diagonal Win Condition */
 
         QuartoState test2 = new QuartoState();
 
@@ -111,7 +107,7 @@ public class QuartoSmartComputerTest {
         }
         assertTrue(isSame2);
 
-        /** Test Errors that occurred during play testing */
+        /* Test Errors that occurred during play testing */
         QuartoState test3 = new QuartoState();
 
         test3.setToPlace(test3.getPool()[5]);
@@ -201,13 +197,17 @@ public class QuartoSmartComputerTest {
 
     }
 
+    /**
+     * Tests QuartoSmartComputer.placeCheck().
+     * @author Alexander Leonor
+     */
     @Test
     public void testPlaceCheck() {
-        /** Initialize Test State and Smart Computer */
+        /* Initialize Test State and Smart Computer */
         QuartoState test1 = new QuartoState();
         QuartoSmartComputer smart = new QuartoSmartComputer("test");
 
-        /** Test Horizontal Win Condition */
+        /* Test Horizontal Win Condition */
 
         //set up a horizontal win condition
         test1.setToPlace(test1.getPool()[0]);
@@ -234,7 +234,7 @@ public class QuartoSmartComputerTest {
 
         assertTrue(isSame);
 
-        /** Test Diagonal Win Condition */
+        /* Test Diagonal Win Condition */
 
         QuartoState test2 = new QuartoState();
 

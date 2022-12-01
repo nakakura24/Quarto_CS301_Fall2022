@@ -17,13 +17,20 @@ import com.example.game.Quarto.objects.Piece;
 import com.example.game.Quarto.players.QuartoHumanPlayer;
 import com.example.game.R;
 
+/**
+ * GUI of a game of Quarto.
+ *
+ * @author Alexander Leonor
+ * @author Cameron Nakakura
+ * @author Dylan Price
+ */
 public class QuartoView extends FlashSurfaceView {
     protected QuartoState state; // current state of the game
 
-    private TextView announceText;
-    private TextView pieceText;
+    private TextView announceText; // text for game announcements
+    private TextView pieceText; // text to list piece characteristics
 
-    private QuartoHumanPlayer player;
+    private QuartoHumanPlayer player; // the human that sees this gui
 
     private final float screenWidth, screenHeight; // screen dimensions in pixels
     private static final RectF[] rects = new RectF[16]; // pre-allocated RectF for drawing pieces
@@ -77,44 +84,67 @@ public class QuartoView extends FlashSurfaceView {
     public QuartoView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
+        /* get screen dimensions */
         screenWidth = getResources().getDisplayMetrics().widthPixels;
         screenHeight = getResources().getDisplayMetrics().heightPixels;
 
+        /* adjustments to bitmap factory for optimization purposes */
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 4; // decrease image size by factor of 4
 
+        /* decoding each image id into an image */
         for (int i = 0 ; i < 16 ; i++) {
             rects[i] = new RectF();
             images[i] = BitmapFactory.decodeResource(getResources(), imageIds[i], options);
         }
 
+        /* instantiating paints */
         boardCirclePaint.setColor(0xFF3700B3);
         backgroundPaint.setColor(Color.BLACK);
 
+        /* setting background color */
         setBackgroundColor(backgroundPaint.getColor());
     }
 
+    /**
+     * Sets the text views for the gui.
+     *
+     * @param announceText text view for the announcer text
+     * @param pieceText text view for the piece text
+     */
     public void setTextViews(TextView announceText, TextView pieceText) {
         this.announceText = announceText;
         this.pieceText = pieceText;
     }
 
+    /**
+     * Sets the human player who sees the gui.
+     *
+     * @param player the player who sees the gui
+     */
     public void setPlayer(QuartoHumanPlayer player) {
         this.player = player;
     }
 
     /**
+     * Sets the state of the game.
      *
-     * @param state
+     * @param state the state of the game
      */
     public void setState(QuartoState state) {this.state = state;}
 
     /**
+     * Gets the state of the game.
      *
-     * @return
+     * @return the state of the game
      */
     public QuartoState getState() {return this.state;}
 
+    /**
+     * Draws the whole gui.
+     *
+     * @param g canvas to draw on
+     */
     @Override
     public void onDraw(Canvas g) {
         if (state == null) return;
@@ -125,8 +155,9 @@ public class QuartoView extends FlashSurfaceView {
     }
 
     /**
+     * Draws the game board along with the pieces on it.
      *
-     * @param g
+     * @param g canvas to draw on
      */
     private void drawBoard(Canvas g) {
         for (int i = 0 ; i < 4 ; i++) {
@@ -137,10 +168,11 @@ public class QuartoView extends FlashSurfaceView {
     }
 
     /**
+     * Draws a spot of the board with the piece on it.
      *
-     * @param g
-     * @param row
-     * @param col
+     * @param g canvas to draw on
+     * @param row row of the spot to be drawn
+     * @param col column of the spot to be drawn
      */
     private void drawBoardCircleWithPiece(Canvas g, int row, int col) {
         /* board circle bounds in pixels */
@@ -179,8 +211,9 @@ public class QuartoView extends FlashSurfaceView {
     }
 
     /**
+     * Draws the pool of available pieces.
      *
-     * @param g
+     * @param g canvas to draw on
      */
     private void drawPool(Canvas g) {
         Piece toPlace = state.getToPlace(); // piece selected to be placed
@@ -236,13 +269,14 @@ public class QuartoView extends FlashSurfaceView {
     }
 
     /**
+     * Draws a piece.
      *
-     * @param g
-     * @param piece
-     * @param left
-     * @param top
-     * @param right
-     * @param bot
+     * @param g canvas to draw on
+     * @param piece piece to draw
+     * @param left left bound of the piece
+     * @param top top bound of the piece
+     * @param right right bound of the piece
+     * @param bot bottom bound of the piece
      */
     private void drawPiece(Canvas g, Piece piece, float left, float top, float right, float bot) {
         rects[piece.getPieceId()].set(left, top, right, bot);
@@ -250,7 +284,7 @@ public class QuartoView extends FlashSurfaceView {
     }
 
     /**
-     *
+     * Sets the text said by the announcer.
      */
     private void setAnnounceText() {
         String[] playerNames = player.getPlayerNames();
@@ -270,7 +304,7 @@ public class QuartoView extends FlashSurfaceView {
     }
 
     /**
-     *
+     * Sets the text that displays the piece characteristics.
      */
     private void setPieceText() {
         Piece toPlace = state.getToPlace();
@@ -284,10 +318,11 @@ public class QuartoView extends FlashSurfaceView {
     }
 
     /**
+     * Registers screen touch coordinates to a location on the game board.
      *
-     * @param x
-     * @param y
-     * @return
+     * @param x x location
+     * @param y y location
+     * @return the spot row and column that was touched
      */
     public Point touchToBoard(float x, float y) {
         for (int i = 0 ; i < 4 ; i++) {
@@ -308,10 +343,11 @@ public class QuartoView extends FlashSurfaceView {
     }
 
     /**
+     * Registers screen touch coordinates to a location in the pool of available pieces.
      *
-     * @param x
-     * @param y
-     * @return
+     * @param x x location
+     * @param y y location
+     * @return the row and column of the pool that was touched
      */
     public Point touchToPool(float x, float y) {
         for (int i = 0 ; i < 2 ; i++) {
@@ -332,18 +368,20 @@ public class QuartoView extends FlashSurfaceView {
     }
 
     /**
+     * Returns a horizontal coordinate given a percent of the screen.
      *
-     * @param percent
-     * @return
+     * @param percent percent of the screen to be converted
+     * @return the location given a percent in pixels
      */
     private float h(float percent) {
         return screenWidth * percent / 100;
     }
 
     /**
+     * Returns a vertical coordinate given a percent of the screen.
      *
-     * @param percent
-     * @return
+     * @param percent percent of the screen to be converted
+     * @return the location given a percent in pixels
      */
     private float v(float percent) {
         return screenHeight * percent / 100;

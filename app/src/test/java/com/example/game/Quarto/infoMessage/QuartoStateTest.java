@@ -9,6 +9,19 @@ import org.junit.Test;
 public class QuartoStateTest {
 
     /**
+     * Tests QuartoState.QuartoState(): copy constructor
+     * @author Cameron Nakakura
+     */
+    @Test
+    public void quartoStateTest() {
+        QuartoState q1 = new QuartoState();
+        q1.pickPiece(0);
+        q1.placePiece(1, 3);
+        QuartoState q2 = new QuartoState(q1);
+        assertTrue(q1.equals(q2));
+    }
+
+    /**
      * Tests QuartoState.pickPiece()
      * @author Dylan Price
      */

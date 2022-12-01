@@ -15,7 +15,13 @@ import com.example.game.Quarto.players.QuartoHumanPlayer;
 import com.example.game.Quarto.players.QuartoSmartComputer;
 import com.example.game.R;
 
-
+/**
+ * Main activity for a game of Quarto.
+ *
+ * @author Alexander Leonor
+ * @author Cameron Nakakura
+ * @author Dylan Price
+ */
 public class QuartoMainActivity extends GameMainActivity {
     // create a port number for quarto to use when playing local network games
     private static final int PORT_NUMBER = 5555;

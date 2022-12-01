@@ -10,19 +10,6 @@ import com.example.game.Quarto.infoMessage.QuartoState;
 import org.junit.Test;
 
 public class QuartoLocalGameTest {
-
-    @Test
-    public void sendUpdatedStateTo() {
-    }
-
-    @Test
-    public void canMove() {
-    }
-
-    @Test
-    public void checkIfGameOver() {
-    }
-
     /**
      * Tests QuartoLocalGame.horizontalWin()
      * @author Cameron Nakakura
@@ -88,9 +75,5 @@ public class QuartoLocalGameTest {
         assertTrue(diagonalWin(state, state.getBoard()[3][3], 3, 3));
         assertFalse(diagonalWin(state, state.getBoard()[2][0], 2, 0));
         assertFalse(diagonalWin(state, state.getBoard()[3][0], 3, 0));
-    }
-
-    @Test
-    public void makeMove() {
     }
 }
