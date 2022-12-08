@@ -88,6 +88,18 @@ public class QuartoView extends FlashSurfaceView {
         screenWidth = getResources().getDisplayMetrics().widthPixels;
         screenHeight = getResources().getDisplayMetrics().heightPixels;
 
+        /**
+         * External Citation
+         *      Date:       November 20, 2022
+         *      Problem:    Process of drawing the game was very slow. Serious lag.
+         *      Resource:
+         *                  https://developer.android.com/develop/ui/views/graphics#:~:text=There%20
+         *                  are%20a%20number%20of%20reasons%20why%20loading,skillfully%20manage%20%2
+         *                  0memory%20and%20disk%20caching.%20
+         *      Solution:
+         *                  The video on the website taught is about the inSampleSize() method, and
+         *                  that it is important to not decode bitmaps in the process of drawing.
+         */
         /* adjustments to bitmap factory for optimization purposes */
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inSampleSize = 4; // decrease image size by factor of 4
